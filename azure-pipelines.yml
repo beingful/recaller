@@ -1,0 +1,45 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: FileTransform@1
+  displayName: 'Substitute variables'
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)'
+    fileType: 'json'
+    targetFiles: '**/appsettings.json'
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'Build'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    
+# - task: AzureRmWebAppDeployment@4
+#   displayName: "Deployment"
+#   inputs:
+#     ConnectionType: 'AzureRM'
+#     azureSubscription: 'Azure for Students(6d415483-a70c-4647-8151-352a0dba5021)'
+#     appType: 'webApp'
+#     WebAppName: 'recaller-bot'
+#     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+- task: AzureWebApp@1
+  displayName: "Deployment"
+  inputs:
+    azureSubscription: 'Azure for Students(6d415483-a70c-4647-8151-352a0dba5021)'
+    appType: 'webApp'
+    appName: 'recaller-bot'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    deploymentMethod: 'auto'
+
+
