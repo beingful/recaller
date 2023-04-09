@@ -22,7 +22,7 @@ steps:
   displayName: 'Publish'
   inputs:
     command: 'publish'
-    publishWebProjects: true
+    publishWebProjects: false
     
 # - task: AzureRmWebAppDeployment@4
 #   displayName: "Deployment"
