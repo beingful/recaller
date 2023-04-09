@@ -23,6 +23,8 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
+    projects: '**/*.csproj'
+
     
 # - task: AzureRmWebAppDeployment@4
 #   displayName: "Deployment"
@@ -34,12 +36,10 @@ steps:
 #     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 - task: AzureWebApp@1
-  displayName: "Deployment"
+  displayName: 'Deployment'
   inputs:
     azureSubscription: 'Azure for Students(6d415483-a70c-4647-8151-352a0dba5021)'
     appType: 'webApp'
     appName: 'recaller-bot'
     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
     deploymentMethod: 'auto'
-
-
