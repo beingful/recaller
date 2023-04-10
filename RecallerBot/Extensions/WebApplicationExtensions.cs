@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
+﻿using Hangfire;
 using RecallerBot.Constants;
 using RecallerBot.Models;
 using RecallerBot.Services;
@@ -9,6 +8,12 @@ namespace RecallerBot.Extensions;
 
 internal static class WebApplicationExtensions
 {
+    public static void AddHangfireDashboard(this WebApplication webApp)
+    {
+        webApp.UseHangfireDashboard();
+        webApp.MapHangfireDashboard();
+    }
+
     public static void AddPost(this WebApplication webApp, BotConfiguration configuration) =>
         webApp
             .MapPost($"/bot/{configuration.EscapedBotToken}",
@@ -21,5 +26,6 @@ internal static class WebApplicationExtensions
 
                         return Results.Ok();
                     })
-            .WithName(WebhookConstants.Name);
+            .WithName(WebhookConstants.Name)
+            .ExcludeFromDescription();
 }

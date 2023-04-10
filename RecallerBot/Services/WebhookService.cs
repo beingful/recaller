@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using RecallerBot.Models;
+﻿using RecallerBot.Models;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot;
 using RecallerBot.Constants;

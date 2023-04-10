@@ -1,6 +1,5 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
-using Microsoft.Extensions.Logging;
 using RecallerBot.Constants;
 using RecallerBot.Enums;
 
@@ -31,33 +30,33 @@ internal sealed class ScheduleService
     public void Schedule(Action<string> sendMessage)
     {
         StartJob(
-            jobId: $"{nameof(Messages.FirstReminder)}:{nameof(CronExpression.EachFriday)}",
-            methodCall: () => sendMessage(Messages.FirstReminder),
+            jobId: $"{nameof(NotificationMessages.FirstReminder)}:{nameof(CronExpression.EachFriday)}",
+            methodCall: () => sendMessage(NotificationMessages.FirstReminder),
             cronExpression: CronExpressions[CronExpression.EachFriday]);
 
         StartJob(
-            jobId: $"{nameof(Messages.LastReminder)}:{nameof(CronExpression.EachFriday)}",
-            methodCall: () => sendMessage(Messages.LastReminder),
+            jobId: $"{nameof(NotificationMessages.LastReminder)}:{nameof(CronExpression.EachFriday)}",
+            methodCall: () => sendMessage(NotificationMessages.LastReminder),
             cronExpression: CronExpressions[CronExpression.EachFriday]);
 
         StartJob(
-            jobId: $"{nameof(Messages.FirstReminder)}:{nameof(CronExpression.EachLastDayOfMonth)}",
+            jobId: $"{nameof(NotificationMessages.FirstReminder)}:{nameof(CronExpression.EachLastDayOfMonth)}",
             methodCall: () =>
             {
                 if (DateTime.Today.DayOfWeek != DayOfWeek.Friday)
                 {
-                    sendMessage(Messages.FirstReminder);
+                    sendMessage(NotificationMessages.FirstReminder);
                 }
             },
             cronExpression: CronExpressions[CronExpression.EachLastDayOfMonth]);
 
         StartJob(
-            jobId: $"{nameof(Messages.LastReminder)}:{nameof(CronExpression.EachLastDayOfMonth)}",
+            jobId: $"{nameof(NotificationMessages.LastReminder)}:{nameof(CronExpression.EachLastDayOfMonth)}",
             methodCall: () =>
             {
                 if (DateTime.Today.DayOfWeek != DayOfWeek.Friday)
                 {
-                    sendMessage(Messages.LastReminder);
+                    sendMessage(NotificationMessages.LastReminder);
                 }
             },
             cronExpression: CronExpressions[CronExpression.EachLastDayOfMonth]);
@@ -66,13 +65,13 @@ internal sealed class ScheduleService
     public void ScheduleTest(Action<string> sendMessage)
     {
         StartJob(
-            jobId: $"{nameof(Messages.FirstReminder)}:{nameof(CronExpression.Minutely)}",
-            methodCall: () => sendMessage(Messages.FirstReminder),
+            jobId: $"{nameof(NotificationMessages.FirstReminder)}:{nameof(CronExpression.Minutely)}",
+            methodCall: () => sendMessage(NotificationMessages.FirstReminder),
             cronExpression: Cron.Minutely());
 
         StartJob(
-            jobId: $"{nameof(Messages.LastReminder)}:{nameof(CronExpression.Minutely)}",
-            methodCall: () => sendMessage(Messages.LastReminder),
+            jobId: $"{nameof(NotificationMessages.LastReminder)}:{nameof(CronExpression.Minutely)}",
+            methodCall: () => sendMessage(NotificationMessages.LastReminder),
             cronExpression: Cron.Minutely());
     }
 

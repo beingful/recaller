@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using RecallerBot.Models;
-using Hangfire;
+﻿using RecallerBot.Models;
 using RecallerBot.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,12 +15,18 @@ builder.Services
     .AddBotConfiguration(botConfiguration)
     .AddScheduling()
     .AddWebhook(botConfiguration)
-    .AddRequestHandling();
+    .AddRequestHandling()
+    .AddSwagger();
 
 var app = builder.Build();
 
-app.UseHangfireDashboard();
-app.MapHangfireDashboard();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.AddHangfireDashboard();
 
 app.AddPost(botConfiguration);
 

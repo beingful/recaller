@@ -1,6 +1,6 @@
 ﻿namespace RecallerBot.Constants;
 
-internal static class Messages
+internal static class NotificationMessages
 {
     public const string FirstReminder = "Timesheet time!";
 

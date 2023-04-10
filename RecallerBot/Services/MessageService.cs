@@ -1,5 +1,4 @@
-﻿using RecallerBot.Enums;
-using RecallerBot.Models;
+﻿using RecallerBot.Models;
 using Telegram.Bot.Types;
 
 namespace RecallerBot.Services;

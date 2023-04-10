@@ -1,7 +1,5 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using RecallerBot.Constants;
 using RecallerBot.Models;
 using RecallerBot.Resolvers;
@@ -55,4 +53,9 @@ internal static class ServiceCollectionExtensions
             .AddScoped<HandleUpdateService>()
             .AddScoped<MessageService>()
             .AddHostedService<WebhookService>();
+
+    public static IServiceCollection AddSwagger(this IServiceCollection services) =>
+        services
+            .AddEndpointsApiExplorer()
+            .AddSwaggerGen();
 }
