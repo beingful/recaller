@@ -26,14 +26,6 @@ steps:
     projects: '**/*.csproj'
     zipAfterPublish: true
 
-# - task: AzureRmWebAppDeployment@4
-#   inputs:
-#     ConnectionType: 'AzureRM'
-#     azureSubscription: 'Azure for Students(6d415483-a70c-4647-8151-352a0dba5021)'
-#     appType: 'webApp'
-#     WebAppName: 'recaller-bot'
-#     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-
 - task: AzureWebApp@1
   displayName: 'Deploy'
   inputs:
