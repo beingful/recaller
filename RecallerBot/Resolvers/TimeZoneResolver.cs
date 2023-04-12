@@ -10,30 +10,28 @@ internal sealed class TimeZoneResolver : ITimeZoneResolver
 
     public TimeZoneInfo GetTimeZoneById([NotNull] string timeZoneId)
     {
-        string currentTimeZoneId = GetCurrentTimezoneId(DateTime.UtcNow);
+        string currentTimeZoneId = GetCurrentTimezoneId();
 
         return TimeZoneInfo.FindSystemTimeZoneById(currentTimeZoneId);
     }
 
-    private string GetCurrentTimezoneId(DateTime now)
+    private string GetCurrentTimezoneId()
     {
-        DateTime lastSundayOfMarch = GetLastSundayOfMonth(now, 3, 3);
-        DateTime lastSundayOfOctober = GetLastSundayOfMonth(now, 10, 4);
+        DateTime now = DateTime.UtcNow;
+
+        DateTime lastSundayOfMarch = GetLastSundayOfMonth(now.Year, 3, 3);
+        DateTime lastSundayOfOctober = GetLastSundayOfMonth(now.Year, 10, 4);
 
         return now >= lastSundayOfMarch && now < lastSundayOfOctober
             ? _utcPlus2
             : _utcPlus3;
     }
 
-    private DateTime GetLastSundayOfMonth(DateTime dateTime, int month, int hour)
+    private DateTime GetLastSundayOfMonth(int year, int month, int hour)
     {
         DateTime lastDayOfMonth = new(
-            year: dateTime.Year,
-            month: dateTime.Month,
-            day: DateTime.DaysInMonth(dateTime.Year, month),
-            hour: hour,
-            minute: 0,
-            second: 0);
+            year: year, month: month, day: DateTime.DaysInMonth(year, month),
+            hour: hour, minute: 0, second: 0);
 
         DateTime lastSundayOfMonth = lastDayOfMonth;
 
