@@ -1,9 +1,11 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
+using RecallerBot.Activator;
 using RecallerBot.Constants;
 using RecallerBot.Models;
 using RecallerBot.Resolvers;
 using RecallerBot.Services;
+using System.ComponentModel;
 using Telegram.Bot;
 
 namespace RecallerBot.Extensions;
@@ -27,6 +29,7 @@ internal static class ServiceCollectionExtensions
             .AddHangfire(configuration =>
             {
                 configuration
+                    .UseActivator(new HangfireActivator(services.BuildServiceProvider()))
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
                     .UseInMemoryStorage();
