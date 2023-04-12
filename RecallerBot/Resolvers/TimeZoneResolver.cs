@@ -25,12 +25,15 @@ internal sealed class TimeZoneResolver : ITimeZoneResolver
             : _utcPlus3;
     }
 
-    private DateTime GetLastSundayOfMonth(DateTime dateTime, int month, int hours)
+    private DateTime GetLastSundayOfMonth(DateTime dateTime, int month, int hour)
     {
         DateTime lastDayOfMonth = new(
             year: dateTime.Year,
             month: dateTime.Month,
-            day: DateTime.DaysInMonth(dateTime.Year, month), hours, 0, 0);
+            day: DateTime.DaysInMonth(dateTime.Year, month),
+            hour: hour,
+            minute: 0,
+            second: 0);
 
         DateTime lastSundayOfMonth = lastDayOfMonth;
 
