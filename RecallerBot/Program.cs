@@ -20,11 +20,12 @@ builder.Services
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Recaller bot API");
+    options.RoutePrefix = string.Empty;
+});
 
 app.AddHangfireDashboard();
 
