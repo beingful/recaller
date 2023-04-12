@@ -26,6 +26,7 @@ internal static class ServiceCollectionExtensions
 
     public static IServiceCollection AddScheduling(this IServiceCollection services) =>
         services
+            .AddScoped<Action>()
             .AddHangfire(configuration =>
             {
                 configuration
