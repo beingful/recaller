@@ -93,7 +93,7 @@ internal sealed class ScheduleService
         }
         else
         {
-            RecurringJob.AddOrUpdate($"{Guid.NewGuid()}", () => methodCall(), cronExpression);
+            RecurringJob.AddOrUpdate($"{Guid.NewGuid()}", () => methodCall.Invoke(), cronExpression);
 
             _logger.LogInformation(LogMessages.JobScheduled, jobId);
         }
