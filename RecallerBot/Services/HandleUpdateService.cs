@@ -34,7 +34,7 @@ internal sealed class HandleUpdateService
 
     private async Task OnMessageReceivedAsync(Message message)
     {
-        _logger.LogInformation(LogMessages.MessageReceived, message, message.Chat.Id);
+        _logger.LogInformation(LogMessages.MessageReceived, message.Text, message.Chat.Id);
 
         if (_messageService.IsCommandRecognized(message))
         {
