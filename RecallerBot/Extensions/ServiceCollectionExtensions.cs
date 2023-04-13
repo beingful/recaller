@@ -2,10 +2,10 @@
 using Hangfire.Storage;
 using RecallerBot.Activator;
 using RecallerBot.Constants;
+using RecallerBot.Interfaces;
 using RecallerBot.Models;
 using RecallerBot.Resolvers;
 using RecallerBot.Services;
-using System.ComponentModel;
 using Telegram.Bot;
 
 namespace RecallerBot.Extensions;
@@ -24,10 +24,23 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddBotConfiguration(this IServiceCollection services, BotConfiguration configuration) =>
         services.AddSingleton<BotConfiguration>(configuration);
 
+    public static IServiceCollection AddWebhook(this IServiceCollection services, BotConfiguration configuration)
+    {
+        services
+            .AddHttpClient(WebhookConstants.Name)
+            .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(configuration.BotToken, httpClient));
+
+        return services;
+    }
+
+    public static IServiceCollection AddBotServices(this IServiceCollection services) =>
+        services
+            .AddSingleton<IBotEndpointService, TelegramBotService>()
+            .AddScoped<IBotMessageService, TelegramBotService>();
+
     public static IServiceCollection AddScheduling(this IServiceCollection services) =>
         services
-            .AddScoped<Object>()
-            .AddScoped<Action>()
+            .AddScoped<BotNotificationService>()
             .AddHangfire(configuration =>
             {
                 configuration
@@ -44,19 +57,10 @@ internal static class ServiceCollectionExtensions
             .AddScoped<IStorageConnection>(sp => JobStorage.Current.GetConnection())
             .AddScoped<ScheduleService>();
 
-    public static IServiceCollection AddWebhook(this IServiceCollection services, BotConfiguration configuration)
-    {
-        services
-            .AddHttpClient(WebhookConstants.Name)
-            .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(configuration.BotToken, httpClient));
-
-        return services;
-    }
-
     public static IServiceCollection AddRequestHandling(this IServiceCollection services) =>
         services
             .AddScoped<HandleUpdateService>()
-            .AddScoped<MessageService>()
+            .AddScoped<MessageValidationService>()
             .AddHostedService<WebhookService>();
 
     public static IServiceCollection AddSwagger(this IServiceCollection services) =>

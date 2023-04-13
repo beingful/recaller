@@ -27,52 +27,22 @@ internal sealed class ScheduleService
             { CronExpression.Minutely, Cron.Minutely() }
         };
 
-    public void Schedule(Action<string> sendMessage)
+    public void Schedule(long chatId)
     {
-        StartJob(
-            jobId: $"{nameof(NotificationMessages.FirstReminder)}:{nameof(CronExpression.EachFriday)}",
-            methodCall: () => sendMessage(NotificationMessages.FirstReminder),
-            cronExpression: CronExpressions[CronExpression.EachFriday]);
+        StartOnFriday(chatId, NotificationMessages.FirstReminder);
 
-        StartJob(
-            jobId: $"{nameof(NotificationMessages.LastReminder)}:{nameof(CronExpression.EachFriday)}",
-            methodCall: () => sendMessage(NotificationMessages.LastReminder),
-            cronExpression: CronExpressions[CronExpression.EachFriday]);
+        StartOnFriday(chatId, NotificationMessages.LastReminder);
 
-        StartJob(
-            jobId: $"{nameof(NotificationMessages.FirstReminder)}:{nameof(CronExpression.EachLastDayOfMonth)}",
-            methodCall: () =>
-            {
-                if (DateTime.Today.DayOfWeek != DayOfWeek.Friday)
-                {
-                    sendMessage(NotificationMessages.FirstReminder);
-                }
-            },
-            cronExpression: CronExpressions[CronExpression.EachLastDayOfMonth]);
+        StartOnLastDayOfMonth(chatId, NotificationMessages.FirstReminder);
 
-        StartJob(
-            jobId: $"{nameof(NotificationMessages.LastReminder)}:{nameof(CronExpression.EachLastDayOfMonth)}",
-            methodCall: () =>
-            {
-                if (DateTime.Today.DayOfWeek != DayOfWeek.Friday)
-                {
-                    sendMessage(NotificationMessages.LastReminder);
-                }
-            },
-            cronExpression: CronExpressions[CronExpression.EachLastDayOfMonth]);
+        StartOnLastDayOfMonth(chatId, NotificationMessages.LastReminder);
     }
 
-    public void ScheduleTest(Action<string> sendMessage)
+    public void ScheduleTest(long chatId)
     {
-        StartJob(
-            jobId: $"{nameof(NotificationMessages.FirstReminder)}:{nameof(CronExpression.Minutely)}",
-            methodCall: () => sendMessage(NotificationMessages.FirstReminder),
-            cronExpression: Cron.Minutely());
+        StartMinutely(chatId, NotificationMessages.FirstReminder);
 
-        StartJob(
-            jobId: $"{nameof(NotificationMessages.LastReminder)}:{nameof(CronExpression.Minutely)}",
-            methodCall: () => sendMessage(NotificationMessages.LastReminder),
-            cronExpression: Cron.Minutely());
+        StartMinutely(chatId, NotificationMessages.LastReminder);
     }
 
     public void Unschedule()
@@ -85,17 +55,44 @@ internal sealed class ScheduleService
         _logger.LogInformation(LogMessages.AllJobsUnscheduled, _storageConnection.GetRecurringJobs().Count);
     }
 
-    private void StartJob(string jobId, Action methodCall, string cronExpression)
+    private void StartOnFriday(long chatId, string message)
+    {
+        CheckIfCanSchedule();
+
+        RecurringJob.AddOrUpdate<BotNotificationService>(
+                methodCall: (notificationService) => notificationService.Send(chatId, message),
+                cronExpression: CronExpressions[CronExpression.EachFriday]);
+
+        _logger.LogInformation(LogMessages.JobScheduled, message, CronExpressions[CronExpression.EachFriday]);
+    }
+
+    private void StartOnLastDayOfMonth(long chatId, string message)
+    {
+        CheckIfCanSchedule();
+
+        RecurringJob.AddOrUpdate<BotNotificationService>(
+                methodCall: (notificationService) => notificationService.Send(chatId, message),
+                cronExpression: CronExpressions[CronExpression.EachLastDayOfMonth]);
+
+        _logger.LogInformation(LogMessages.JobScheduled, message, CronExpressions[CronExpression.EachLastDayOfMonth]);
+    }
+
+    private void StartMinutely(long chatId, string message)
+    {
+        CheckIfCanSchedule();
+
+        RecurringJob.AddOrUpdate<BotNotificationService>(
+                methodCall: (notificationService) => notificationService.Send(chatId, message),
+                cronExpression: CronExpressions[CronExpression.Minutely]);
+
+        _logger.LogInformation(LogMessages.JobScheduled, message, CronExpressions[CronExpression.Minutely]);
+    }
+
+    private void CheckIfCanSchedule()
     {
         if (_storageConnection.GetRecurringJobs().Count == _maximumRecurringJobsNumber)
         {
             throw new Exception(ErrorMessages.ScheduleOverflowing);
-        }
-        else
-        {
-            RecurringJob.AddOrUpdate($"{Guid.NewGuid()}", () => methodCall.Invoke(), cronExpression);
-
-            _logger.LogInformation(LogMessages.JobScheduled, jobId);
         }
     }
 }

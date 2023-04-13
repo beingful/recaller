@@ -18,7 +18,7 @@ internal static class LogMessages
 
     public const string Error = "There is an error. Message: {message} \n Stacktrace: {stacktrace}";
 
-    public const string JobScheduled = "The job with id {id} is scheduled";
+    public const string JobScheduled = "The job with message {message} and cron {cron} is scheduled";
 
     public const string AllJobsUnscheduled = "All jobs are unscheduled. Current number of jobs: {jobsNumber}";
 }

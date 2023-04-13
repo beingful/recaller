@@ -3,14 +3,12 @@ using Telegram.Bot.Types;
 
 namespace RecallerBot.Services;
 
-internal sealed class MessageService
+internal sealed class MessageValidationService
 {
     private readonly BotConfiguration _botCofiguration;
 
-    public MessageService(BotConfiguration botCofiguration)
-    {
+    public MessageValidationService(BotConfiguration botCofiguration) =>
         _botCofiguration = botCofiguration;
-    }
 
     public bool IsChatAllowed(Message message) =>
         _botCofiguration.AllowedChats.ContainsValue($"{message.Chat.Id}");

@@ -1,23 +1,22 @@
 ﻿using RecallerBot.Models;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot;
 using RecallerBot.Constants;
+using RecallerBot.Interfaces;
 
 namespace RecallerBot.Services;
 
 internal sealed class WebhookService : IHostedService
 {
     private readonly BotConfiguration _botConfiguration;
-    private readonly ITelegramBotClient _botClient;
+    private readonly IBotEndpointService _botEndpointService;
     private readonly ILogger<WebhookService> _logger;
 
     public WebhookService(
         BotConfiguration botConfiguration,
-        ITelegramBotClient botClient,
+        IBotEndpointService botEndpointService,
         ILogger<WebhookService> logger)
     {
         _botConfiguration = botConfiguration;
-        _botClient = botClient;
+        _botEndpointService = botEndpointService;
         _logger = logger;
     }
 
@@ -29,10 +28,7 @@ internal sealed class WebhookService : IHostedService
 
         try
         {
-            await _botClient.SetWebhookAsync(
-            url: webhookAddress,
-            allowedUpdates: Array.Empty<UpdateType>(),
-            cancellationToken: cancellationToken);
+            await _botEndpointService.SetWebhookAsync(webhookAddress, cancellationToken);
         }
         catch (Exception exception)
         {
@@ -46,6 +42,6 @@ internal sealed class WebhookService : IHostedService
     {
         _logger.LogInformation(LogMessages.RemoveWebhook);
 
-        await _botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
+        await _botEndpointService.DeleteWebhookAsync(cancellationToken);
     }
 }

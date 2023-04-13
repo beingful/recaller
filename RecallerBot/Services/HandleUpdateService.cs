@@ -1,27 +1,27 @@
-﻿using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
+﻿using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using System.Net;
 using RecallerBot.Constants;
+using RecallerBot.Interfaces;
 
 namespace RecallerBot.Services;
 
 internal sealed class HandleUpdateService
 {
-    private readonly MessageService _messageService;
+    private readonly MessageValidationService _messageService;
     private readonly ScheduleService _scheduleService;
-    private readonly ITelegramBotClient _botClient;
+    private readonly IBotMessageService _botMessageService;
     private readonly ILogger<HandleUpdateService> _logger;
 
     public HandleUpdateService(
-        MessageService messageService,
+        MessageValidationService messageService,
         ScheduleService scheduleService,
-        ITelegramBotClient botClient,
+        IBotMessageService botmessageService,
         ILogger<HandleUpdateService> logger)
     {
         _messageService = messageService;
         _scheduleService = scheduleService;
-        _botClient = botClient;
+        _botMessageService = botmessageService;
         _logger = logger;
     }
 
@@ -44,20 +44,20 @@ internal sealed class HandleUpdateService
                 {
                     HandleMessage(message);
 
-                    await _botClient.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.OK}");
+                    await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.OK}");
                 }
                 catch (Exception exception)
                 {
                     _logger.LogError(LogMessages.Error, exception.Message, exception.StackTrace);
 
-                    await _botClient.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.NotImplemented}");
+                    await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.NotImplemented}");
                 }
             }
             else
             {
                 _logger.LogInformation(LogMessages.ChatNotAllowed);
 
-                await _botClient.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.Forbidden}");
+                await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.Forbidden}");
             }
         }
         else
@@ -74,10 +74,7 @@ internal sealed class HandleUpdateService
 
         if (command == Enums.BotCommand.Start)
         {
-            _scheduleService.Schedule(async (scheduledMessage) =>
-            {
-                await _botClient.SendTextMessageAsync(message.Chat.Id, scheduledMessage);
-            });
+            _scheduleService.Schedule(message.Chat.Id);
         }
         else if (command == Enums.BotCommand.Stop)
         {
@@ -85,10 +82,7 @@ internal sealed class HandleUpdateService
         }
         else if (command == Enums.BotCommand.Test)
         {
-            _scheduleService.ScheduleTest(async (scheduledMessage) =>
-            {
-                await _botClient.SendTextMessageAsync(message.Chat.Id, scheduledMessage);
-            });
+            _scheduleService.ScheduleTest(message.Chat.Id);
         }
     }
 

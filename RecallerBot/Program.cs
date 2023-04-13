@@ -13,8 +13,9 @@ var botConfiguration = builder.Configuration
 
 builder.Services
     .AddBotConfiguration(botConfiguration)
-    .AddScheduling()
     .AddWebhook(botConfiguration)
+    .AddBotServices()
+    .AddScheduling()
     .AddRequestHandling()
     .AddSwagger();
 
