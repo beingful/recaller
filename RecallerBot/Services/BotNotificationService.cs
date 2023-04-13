@@ -9,10 +9,10 @@ internal sealed class BotNotificationService
     public BotNotificationService(IBotMessageService botMessageService) =>
         _botMessageService = botMessageService;
 
-    public async Task Send(long chatId, string message) =>
+    public async Task SendAsync(long chatId, string message) =>
         await _botMessageService.SendTextMessageAsync(chatId, message);
 
-    public async Task SendIfNotFriday(long chatId, string message)
+    public async Task SendIfNotFridayAsync(long chatId, string message)
     {
         if (DateTime.Today.DayOfWeek != DayOfWeek.Friday)
         {
