@@ -60,7 +60,8 @@ internal sealed class ScheduleService
         CheckIfCanSchedule();
 
         RecurringJob.AddOrUpdate<BotNotificationService>(
-                methodCall: (notificationService) => notificationService.Send(chatId, message),
+                recurringJobId: $"{Guid.NewGuid()}",
+                methodCall: (notificationService) => notificationService.SendAsync(chatId, message),
                 cronExpression: CronExpressions[CronExpression.EachFriday]);
 
         _logger.LogInformation(LogMessages.JobScheduled, message, CronExpressions[CronExpression.EachFriday]);
@@ -71,7 +72,8 @@ internal sealed class ScheduleService
         CheckIfCanSchedule();
 
         RecurringJob.AddOrUpdate<BotNotificationService>(
-                methodCall: (notificationService) => notificationService.Send(chatId, message),
+                recurringJobId: $"{Guid.NewGuid()}",
+                methodCall: (notificationService) => notificationService.SendAsync(chatId, message),
                 cronExpression: CronExpressions[CronExpression.EachLastDayOfMonth]);
 
         _logger.LogInformation(LogMessages.JobScheduled, message, CronExpressions[CronExpression.EachLastDayOfMonth]);
@@ -82,7 +84,8 @@ internal sealed class ScheduleService
         CheckIfCanSchedule();
 
         RecurringJob.AddOrUpdate<BotNotificationService>(
-                methodCall: (notificationService) => notificationService.Send(chatId, message),
+                recurringJobId: $"{Guid.NewGuid()}",
+                methodCall: (notificationService) => notificationService.SendAsync(chatId, message),
                 cronExpression: CronExpressions[CronExpression.Minutely]);
 
         _logger.LogInformation(LogMessages.JobScheduled, message, CronExpressions[CronExpression.Minutely]);
