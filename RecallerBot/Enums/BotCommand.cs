@@ -5,5 +5,6 @@ internal enum BotCommand
     Undefined,
     Start,
     Stop,
-    Test
+    Test,
+    DoNotSleep
 }

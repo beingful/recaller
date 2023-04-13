@@ -55,7 +55,7 @@ internal static class ServiceCollectionExtensions
                 options.TimeZoneResolver = new TimeZoneResolver();
             })
             .AddScoped<IStorageConnection>(sp => JobStorage.Current.GetConnection())
-            .AddScoped<ScheduleService>();
+            .AddScoped<BotScheduleService>();
 
     public static IServiceCollection AddRequestHandling(this IServiceCollection services) =>
         services

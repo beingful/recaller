@@ -1,4 +1,5 @@
-﻿using RecallerBot.Enums;
+﻿using RecallerBot.Constants;
+using RecallerBot.Enums;
 
 namespace RecallerBot.Models;
 
@@ -20,6 +21,12 @@ internal sealed class BotConfiguration
     {
         { $"/start{BotUsername}", BotCommand.Start },
         { $"/stop{BotUsername}", BotCommand.Stop },
-        { $"/test{BotUsername}", BotCommand.Test }
+        { $"/test{BotUsername}", BotCommand.Test },
+        { $"/doNotSleep{BotUsername}", BotCommand.DoNotSleep }
     };
+
+    public string DoNotSleepCommand =>
+        Commands.First(command => command.Value == BotCommand.DoNotSleep).Key;
+
+    public long TestChat => Convert.ToInt64(AllowedChats[Chats.TestChat]);
 }

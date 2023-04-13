@@ -20,5 +20,5 @@ internal static class LogMessages
 
     public const string JobScheduled = "The job with message {message} and cron {cron} is scheduled";
 
-    public const string AllJobsUnscheduled = "All jobs are unscheduled. Current number of jobs: {jobsNumber}";
+    public const string AllJobsUnscheduled = "Jobs are unscheduled. Current number of jobs: {jobsNumber}";
 }

@@ -9,13 +9,13 @@ namespace RecallerBot.Services;
 internal sealed class HandleUpdateService
 {
     private readonly MessageValidationService _messageService;
-    private readonly ScheduleService _scheduleService;
+    private readonly BotScheduleService _scheduleService;
     private readonly IBotMessageService _botMessageService;
     private readonly ILogger<HandleUpdateService> _logger;
 
     public HandleUpdateService(
         MessageValidationService messageService,
-        ScheduleService scheduleService,
+        BotScheduleService scheduleService,
         IBotMessageService botmessageService,
         ILogger<HandleUpdateService> logger)
     {

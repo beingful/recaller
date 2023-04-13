@@ -20,6 +20,6 @@ internal sealed class TelegramBotService : IBotMessageService, IBotEndpointServi
             allowedUpdates: Array.Empty<UpdateType>(),
             cancellationToken: cancellationToken);
 
-    async Task IBotEndpointService.DeleteWebhookAsync(CancellationToken cancellationToken) =>
+    async Task IBotEndpointService.DeleteWebhooksAsync(CancellationToken cancellationToken) =>
         await _botClient.DeleteWebhookAsync(cancellationToken: cancellationToken);
 }
