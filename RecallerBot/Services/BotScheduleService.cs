@@ -11,7 +11,6 @@ internal sealed class BotScheduleService
     private readonly ILogger<BotScheduleService> _logger;
 
     private const int _maximumRecurringJobsNumber = 5;
-    private const string _botTriggeringJobId = nameof(_botTriggeringJobId);
 
     public BotScheduleService(
         IStorageConnection storageConnection,
@@ -24,9 +23,8 @@ internal sealed class BotScheduleService
     public Dictionary<CronExpression, string> CronExpressions =>
         new()
         {
-            { CronExpression.EachFriday, "0 10 * * 5" },
-            { CronExpression.EachLastDayOfMonth, "0 10 L * *" },
-            { CronExpression.EachEighteenMinutes, "*/18 * * * *" },
+            { CronExpression.EachFriday, Cron.Weekly(DayOfWeek.Thursday, 19, 51)/*"26 19 * * THU"*//*"0 10 * * FRI"*/ },
+            { CronExpression.EachLastDayOfMonth, Cron.Weekly(DayOfWeek.Thursday, 19, 52)/*"27 19 * * THU"*//*"0 10 L * *"*/ },
             { CronExpression.Minutely, Cron.Minutely() }
         };
 
@@ -41,11 +39,6 @@ internal sealed class BotScheduleService
         StartExcludingFridays(chatId, NotificationMessages.LastReminder, CronExpressions[CronExpression.EachLastDayOfMonth]);
     }
 
-    public void ScheduleBotTriggering(long chatId, string message)
-    {
-        Start(chatId, message, CronExpressions[CronExpression.EachEighteenMinutes], _botTriggeringJobId);
-    }
-
     public void ScheduleTest(long chatId)
     {
         Start(chatId, NotificationMessages.FirstReminder, CronExpressions[CronExpression.Minutely]);
@@ -57,23 +50,18 @@ internal sealed class BotScheduleService
     {
         foreach (var recurringJob in _storageConnection.GetRecurringJobs())
         {
-            if (recurringJob.Id != _botTriggeringJobId)
-            {
-                RecurringJob.RemoveIfExists(recurringJob.Id);
-            }
+            RecurringJob.RemoveIfExists(recurringJob.Id);
         }
 
         _logger.LogInformation(LogMessages.AllJobsUnscheduled, _storageConnection.GetRecurringJobs().Count);
     }
 
-    private void Start(long chatId, string message, string cron, string? jobId = null)
+    private void Start(long chatId, string message, string cron)
     {
         CheckIfCanSchedule();
 
-        jobId ??= $"{Guid.NewGuid()}";
-
         RecurringJob.AddOrUpdate<BotNotificationService>(
-                recurringJobId: jobId,
+                recurringJobId: $"{Guid.NewGuid()}",
                 methodCall: (notificationService) => notificationService.SendAsync(chatId, message),
                 cronExpression: cron);
 

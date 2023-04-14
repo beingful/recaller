@@ -4,6 +4,5 @@ internal enum CronExpression
 {
     EachFriday,
     EachLastDayOfMonth,
-    EachEighteenMinutes,
     Minutely
 }
