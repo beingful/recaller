@@ -9,7 +9,7 @@ internal sealed class ChatMessageService
     private readonly Dictionary<string, string> _allowedChats;
     private readonly Dictionary<string, Enums.BotCommand> _allowedCommands;
 
-    public ChatMessageService(BotConfiguration botConfiguration, ConfigurationManager configuration)
+    public ChatMessageService(BotConfiguration botConfiguration, IConfiguration configuration)
     {
         _allowedChats = configuration
                             .GetSection(ConfigurationConstants.AllowedChats)

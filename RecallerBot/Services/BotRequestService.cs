@@ -10,7 +10,7 @@ internal sealed class BotRequestService : INotificationService
     private readonly string _sendMessageUrl;
     private readonly ILogger<BotRequestService> _logger;
 
-    public BotRequestService(ConfigurationManager configuration, ILogger<BotRequestService> logger)
+    public BotRequestService(IConfiguration configuration, ILogger<BotRequestService> logger)
     {
         _sendMessageUrl = configuration
                             .GetSection(ConfigurationConstants.BotRequestUrl)
