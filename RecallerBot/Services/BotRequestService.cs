@@ -26,11 +26,11 @@ internal sealed class BotRequestService : INotificationService
             {
                 From = new Sender()
                 {
-                    Id = Convert.ToInt64(_bot.CreatorUserId)
+                    Id = _bot.CreatorUserId
                 },
                 Chat = new Chat()
                 {
-                    Id = Convert.ToInt64(notification.ChatId)
+                    Id = notification.ChatId
                 },
                 Text = notification.Text
             }

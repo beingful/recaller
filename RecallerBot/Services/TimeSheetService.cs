@@ -1,6 +1,6 @@
 ﻿using RecallerBot.Constants;
 using RecallerBot.Enums;
-using RecallerBot.Models;
+using RecallerBot.Models.Schedule;
 
 namespace RecallerBot.Services;
 
@@ -17,14 +17,42 @@ internal class TimeSheetService
     {
         _scheduleService.ScheduleAll<NotificationService>(new List<Job>
         {
-            new(message: NotificationMessages.FirstReminder, chatId: chatId, triggerTime: TimePeriod.OnFridays),
-            new(message: NotificationMessages.LastReminder, chatId: chatId, triggerTime: TimePeriod.OnFridays)
+            new(message: NotificationMessages.FirstReminder,
+                chatId: chatId,
+                triggerTime: new Time
+                {
+                    TimePeriod = TimePeriod.Friday,
+                    Hours = 22,
+                    Minutes = 40
+                }),
+            new(message: NotificationMessages.LastReminder,
+                chatId: chatId,
+                triggerTime: new Time
+                {
+                    TimePeriod = TimePeriod.Friday,
+                    Hours = 22,
+                    Minutes = 45
+                })
         });
 
         _scheduleService.ScheduleAllExceptOnFridays<NotificationService>(new List<Job>
         {
-            new(message: NotificationMessages.FirstReminder, chatId: chatId, triggerTime: TimePeriod.OnLastDayOfMonth),
-            new(message: NotificationMessages.LastReminder, chatId: chatId, triggerTime: TimePeriod.OnLastDayOfMonth)
+            new(message: NotificationMessages.FirstReminder,
+                chatId: chatId,
+                triggerTime: new Time
+                {
+                    TimePeriod = TimePeriod.LastDayOfMonth,
+                    Hours = 22,
+                    Minutes = 40
+                }),
+            new(message: NotificationMessages.LastReminder,
+                chatId: chatId,
+                triggerTime: new Time
+                {
+                    TimePeriod = TimePeriod.LastDayOfMonth,
+                    Hours = 22,
+                    Minutes = 45
+                })
         });
     }
 

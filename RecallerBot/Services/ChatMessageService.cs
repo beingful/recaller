@@ -19,7 +19,7 @@ internal sealed class ChatMessageService
         };
     }
 
-    public long TestChat => Convert.ToInt64(_allowedChats[nameof(TestChat)]);
+    public long TestChat => _allowedChats[nameof(TestChat)];
 
     public bool IsChatAllowed(Message message) =>
         _allowedChats.ContainsValue(message.Chat.Id);

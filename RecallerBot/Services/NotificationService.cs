@@ -3,7 +3,7 @@ using RecallerBot.Models;
 
 namespace RecallerBot.Services;
 
-internal class NotificationService : INotificationService, IConditionedNotificationService
+internal class NotificationService : IConditionedNotificationService
 {
     private readonly IBotMessageService _botMessageService;
 

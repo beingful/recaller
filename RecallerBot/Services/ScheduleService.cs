@@ -3,7 +3,7 @@ using Hangfire.Storage;
 using RecallerBot.Constants;
 using RecallerBot.Enums;
 using RecallerBot.Interfaces;
-using RecallerBot.Models;
+using RecallerBot.Models.Schedule;
 
 namespace RecallerBot.Services;
 
@@ -20,11 +20,11 @@ internal sealed class ScheduleService
         _logger = logger;
     }
 
-    public IReadOnlyDictionary<TimePeriod, string> CronExpressions => new Dictionary<TimePeriod, string>()
+    public Dictionary<TimePeriod, Func<Time, string>> CronExpressions => new()
     {
-        { TimePeriod.OnFridays, Cron.Weekly(DayOfWeek.Thursday, 19, 51)/*"26 19 * * THU"*//*"0 10 * * FRI"*/ },
-        { TimePeriod.OnLastDayOfMonth, Cron.Weekly(DayOfWeek.Thursday, 19, 52)/*"27 19 * * THU"*//*"0 10 L * *"*/ },
-        { TimePeriod.Minutely, Cron.Minutely() }
+        { TimePeriod.Friday, (Time time) => Cron.Weekly(DayOfWeek.Saturday, time.Hours, time.Minutes)/*"26 19 * * THU"*//*"0 10 * * FRI"*/ },
+        { TimePeriod.LastDayOfMonth, (Time time) => $"{time.Minutes} {time.Hours} * * SAT" }, //*"0 10 L * *"*/ },
+        { TimePeriod.MimuteInterval, (Time time) => $"*/{time.MinuteInterval} * * * *" }
     };
 
     public void ScheduleAll<T>(List<Job> jobs) where T : INotificationService
@@ -39,7 +39,7 @@ internal sealed class ScheduleService
         RecurringJob.AddOrUpdate<T>(
                 recurringJobId: job.Id,
                 methodCall: (notificationService) => notificationService.SendAsync(job.Notification),
-                cronExpression: CronExpressions[job.TriggerTime]);
+                cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime));
 
         _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime);
     }
@@ -70,7 +70,7 @@ internal sealed class ScheduleService
                 recurringJobId: job.Id,
                 methodCall: (notificationService) => notificationService
                 .SendByConditionAsync(job.Notification, () => DateTime.Today.DayOfWeek != DayOfWeek.Friday),
-                cronExpression: CronExpressions[job.TriggerTime]);
+                cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime));
 
         _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime);
     }
