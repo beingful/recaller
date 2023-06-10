@@ -16,9 +16,9 @@ internal static class LogMessages
 
     public const string StartHandleMessage = "Start handle the message";
 
-    public const string Error = "There is an error. Message: {message} \n Stacktrace: {stacktrace}";
+    public const string JobScheduled = "The job with message {message} and trigger time {triggerTime} is scheduled";
 
-    public const string JobScheduled = "The job with message {message} and cron {cron} is scheduled";
+    public const string JobsWithEndpointUnscheduled = "Jobs with endpoint {endpoint} are unscheduled. Current number of jobs: {jobsNumber}";
 
-    public const string AllJobsUnscheduled = "Jobs are unscheduled. Current number of jobs: {jobsNumber}";
+    public const string BotDoesNotSleep = "Bot does not sleep";
 }

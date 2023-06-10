@@ -8,19 +8,22 @@ namespace RecallerBot.Services;
 
 internal sealed class HandleUpdateService
 {
-    private readonly MessageValidationService _messageService;
-    private readonly BotScheduleService _scheduleService;
+    private readonly ChatMessageService _chatMessageService;
+    private readonly TimeSheetService _timeSheetService;
+    private readonly AlarmClockService _alarmClockService;
     private readonly IBotMessageService _botMessageService;
     private readonly ILogger<HandleUpdateService> _logger;
 
     public HandleUpdateService(
-        MessageValidationService messageService,
-        BotScheduleService scheduleService,
+        ChatMessageService chatMessageService,
+        TimeSheetService timeSheetService,
+        AlarmClockService alarmClockService,
         IBotMessageService botmessageService,
         ILogger<HandleUpdateService> logger)
     {
-        _messageService = messageService;
-        _scheduleService = scheduleService;
+        _chatMessageService = chatMessageService;
+        _timeSheetService = timeSheetService;
+        _alarmClockService = alarmClockService;
         _botMessageService = botmessageService;
         _logger = logger;
     }
@@ -36,9 +39,9 @@ internal sealed class HandleUpdateService
     {
         _logger.LogInformation(LogMessages.MessageReceived, message.Text, message.Chat.Id);
 
-        if (_messageService.IsCommandRecognized(message))
+        if (_chatMessageService.IsCommandRecognized(message))
         {
-            if (_messageService.IsChatAllowed(message))
+            if (_chatMessageService.IsChatAllowed(message))
             {
                 try
                 {
@@ -48,7 +51,7 @@ internal sealed class HandleUpdateService
                 }
                 catch (Exception exception)
                 {
-                    _logger.LogError(LogMessages.Error, exception.Message, exception.StackTrace);
+                    _logger.LogError(ErrorMessages.GeneralError, exception.Message, exception.StackTrace);
 
                     await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.NotImplemented}");
                 }
@@ -70,19 +73,19 @@ internal sealed class HandleUpdateService
     {
         _logger.LogInformation(LogMessages.StartHandleMessage);
 
-        Enums.BotCommand command = _messageService.MapToCommand(message);
+        Enums.BotCommand command = _chatMessageService.MapToCommand(message);
 
         if (command == Enums.BotCommand.Start)
         {
-            _scheduleService.Schedule(message.Chat.Id);
+            _timeSheetService.StartNotifying(message.Chat.Id);
         }
         else if (command == Enums.BotCommand.Stop)
         {
-            _scheduleService.Unschedule();
+            _timeSheetService.UnscheduleNotifications(message.Chat.Id);
         }
-        else if (command == Enums.BotCommand.Test)
+        else if (command == Enums.BotCommand.AlarmClock)
         {
-            _scheduleService.ScheduleTest(message.Chat.Id);
+            _alarmClockService.SetUp();
         }
     }
 

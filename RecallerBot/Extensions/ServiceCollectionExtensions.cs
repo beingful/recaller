@@ -36,11 +36,13 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddBotServices(this IServiceCollection services) =>
         services
             .AddSingleton<IBotEndpointService, TelegramBotService>()
-            .AddScoped<IBotMessageService, TelegramBotService>();
+            .AddScoped<IBotMessageService, TelegramBotService>()
+            .AddScoped<ChatMessageService>();
 
     public static IServiceCollection AddScheduling(this IServiceCollection services) =>
         services
-            .AddScoped<BotNotificationService>()
+            .AddScoped<NotificationService>()
+            .AddScoped<BotRequestService>()
             .AddHangfire(configuration =>
             {
                 configuration
@@ -55,12 +57,13 @@ internal static class ServiceCollectionExtensions
                 options.TimeZoneResolver = new TimeZoneResolver();
             })
             .AddScoped<IStorageConnection>(sp => JobStorage.Current.GetConnection())
-            .AddScoped<BotScheduleService>();
+            .AddScoped<ScheduleService>()
+            .AddScoped<TimeSheetService>()
+            .AddScoped<AlarmClockService>();
 
     public static IServiceCollection AddRequestHandling(this IServiceCollection services) =>
         services
             .AddScoped<HandleUpdateService>()
-            .AddScoped<MessageValidationService>()
             .AddHostedService<WebhookService>();
 
     public static IServiceCollection AddSwagger(this IServiceCollection services) =>

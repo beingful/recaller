@@ -5,5 +5,5 @@ internal enum BotCommand
     Undefined,
     Start,
     Stop,
-    Test
+    AlarmClock
 }

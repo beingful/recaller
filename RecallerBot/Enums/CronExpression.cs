@@ -1,8 +1,8 @@
 ﻿namespace RecallerBot.Enums;
 
-internal enum CronExpression
+internal enum TimePeriod
 {
-    EachFriday,
-    EachLastDayOfMonth,
+    OnFridays,
+    OnLastDayOfMonth,
     Minutely
 }

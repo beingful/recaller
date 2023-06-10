@@ -32,7 +32,7 @@ internal sealed class WebhookService : IHostedService
         }
         catch (Exception exception)
         {
-            _logger.LogError(LogMessages.Error, exception.Message, exception.StackTrace);
+            _logger.LogError(ErrorMessages.GeneralError, exception.Message, exception.StackTrace);
 
             throw;
         }
