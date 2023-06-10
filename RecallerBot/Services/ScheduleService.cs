@@ -4,6 +4,7 @@ using RecallerBot.Constants;
 using RecallerBot.Enums;
 using RecallerBot.Interfaces;
 using RecallerBot.Models.Schedule;
+using RecallerBot.Resolvers;
 
 namespace RecallerBot.Services;
 
@@ -37,11 +38,13 @@ internal sealed class ScheduleService
         CheckIfCanSchedule();
 
         string cronExpression = CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime);
+        TimeZoneInfo timeZone = new TimeZoneResolver().GetTimeZoneById("current");
 
         RecurringJob.AddOrUpdate<T>(
                 recurringJobId: job.Id,
                 methodCall: (notificationService) => notificationService.SendAsync(job.Notification),
-                cronExpression: cronExpression);
+                cronExpression: cronExpression,
+                timeZone: timeZone);
 
         _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, cronExpression);
     }
