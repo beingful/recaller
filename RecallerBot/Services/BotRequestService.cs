@@ -33,7 +33,7 @@ internal sealed class BotRequestService : INotificationService
         catch (Exception ex)
         {
             _logger.LogError(ErrorMessages.GeneralError, ex.Message, ex.StackTrace);
-            _logger.LogError(ErrorMessages.CanNotRequestBot);
+            _logger.LogError(ErrorMessages.CanNotRequestBot, _sendMessageUrl);
         }
     }
 }
