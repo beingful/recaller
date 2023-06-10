@@ -16,13 +16,9 @@ internal static class LogMessages
 
     public const string StartHandleMessage = "Start handle the message";
 
-    public const string JobScheduled = "The job with message {message} and cron {cron} is scheduled";
+    public const string JobScheduled = "The job with message {message} and time period {timePeriod} is scheduled";
 
     public const string JobsWithEndpointUnscheduled = "Jobs with endpoint {endpoint} are unscheduled. Current number of jobs: {jobsNumber}";
 
     public const string BotDoesNotSleep = "Bot does not sleep";
-
-    public const string StartSendingNotification = "Start sending notification {text} to chat wiht id {chatId}";
-
-    public const string FinishSendingNotification = "Finish sending notification {text} to chat wiht id {chatId}";
 }

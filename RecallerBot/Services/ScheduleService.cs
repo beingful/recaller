@@ -37,16 +37,16 @@ internal sealed class ScheduleService
     {
         CheckIfCanSchedule();
 
-        string cronExpression = CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime);
-        TimeZoneInfo timeZone = new TimeZoneResolver().GetTimeZoneById("current");
-
         RecurringJob.AddOrUpdate<T>(
                 recurringJobId: job.Id,
                 methodCall: (notificationService) => notificationService.SendAsync(job.Notification),
-                cronExpression: cronExpression,
-                timeZone: timeZone);
+                cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime),
+                options: new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneProvider.GetTimeZone()
+                });
 
-        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, cronExpression);
+        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime.TimePeriod);
     }
 
     public void ScheduleAllExceptOnFridays<T>(List<Job> jobs) where T : IConditionedNotificationService
@@ -73,9 +73,12 @@ internal sealed class ScheduleService
 
         RecurringJob.AddOrUpdate<T>(
                 recurringJobId: job.Id,
-                methodCall: (notificationService) => notificationService
-                .SendExceptFridaysAsync(job.Notification),
-                cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime));
+                methodCall: (notificationService) => notificationService.SendExceptFridaysAsync(job.Notification),
+                cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime),
+                options: new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneProvider.GetTimeZone()
+                });
 
         _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime.TimePeriod);
     }

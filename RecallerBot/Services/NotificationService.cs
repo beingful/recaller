@@ -1,5 +1,4 @@
-﻿using RecallerBot.Constants;
-using RecallerBot.Interfaces;
+﻿using RecallerBot.Interfaces;
 using RecallerBot.Models;
 
 namespace RecallerBot.Services;
@@ -15,24 +14,14 @@ internal class NotificationService : IConditionedNotificationService
         _logger = logger;
     }
 
-    public async Task SendAsync(Notification notification)
-    {
-        _logger.LogInformation(LogMessages.StartSendingNotification, notification.Text, notification.ChatId);
-
+    public async Task SendAsync(Notification notification) =>
         await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
-
-        _logger.LogInformation(LogMessages.FinishSendingNotification, notification.Text, notification.ChatId);
-    }
 
     public async Task SendExceptFridaysAsync(Notification notification)
     {
         if (DateTime.Today.DayOfWeek != DayOfWeek.Friday) 
         {
-            _logger.LogInformation(LogMessages.StartSendingNotification, notification.Text, notification.ChatId);
-
             await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
-
-            _logger.LogInformation(LogMessages.FinishSendingNotification, notification.Text, notification.ChatId);
         }
     }
 }

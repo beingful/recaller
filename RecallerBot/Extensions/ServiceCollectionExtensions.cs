@@ -54,7 +54,6 @@ internal static class ServiceCollectionExtensions
             .AddHangfireServer(options =>
             {
                 options.WorkerCount = 1;
-                options.TimeZoneResolver = new TimeZoneResolver();
             })
             .AddScoped<IStorageConnection>(sp => JobStorage.Current.GetConnection())
             .AddScoped<ScheduleService>()

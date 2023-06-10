@@ -1,21 +1,18 @@
-﻿using Hangfire;
-using Hangfire.Annotations;
+﻿namespace RecallerBot.Resolvers;
 
-namespace RecallerBot.Resolvers;
-
-internal sealed class TimeZoneResolver : ITimeZoneResolver
+internal static class TimeZoneProvider
 {
     private const string _utcPlus2 = "E. Europe Standard Time";
     private const string _utcPlus3 = "Arab Standard Time";
 
-    public TimeZoneInfo GetTimeZoneById([NotNull] string timeZoneId)
+    public static TimeZoneInfo GetTimeZone()
     {
         string currentTimeZoneId = GetCurrentTimezoneId();
 
         return TimeZoneInfo.FindSystemTimeZoneById(currentTimeZoneId);
     }
 
-    private string GetCurrentTimezoneId()
+    private static string GetCurrentTimezoneId()
     {
         DateTime now = DateTime.UtcNow;
 
@@ -27,7 +24,7 @@ internal sealed class TimeZoneResolver : ITimeZoneResolver
             : _utcPlus3;
     }
 
-    private DateTime GetLastSundayOfMonth(int year, int month, int hour)
+    private static DateTime GetLastSundayOfMonth(int year, int month, int hour)
     {
         DateTime lastDayOfMonth = new(
             year: year, month: month, day: DateTime.DaysInMonth(year, month),
