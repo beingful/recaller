@@ -22,8 +22,8 @@ internal sealed class ScheduleService
 
     public Dictionary<TimePeriod, Func<Time, string>> CronExpressions => new()
     {
-        { TimePeriod.Friday, (Time time) => "*/1 * * * *"/*Cron.Weekly(DayOfWeek.Saturday, time.Hours, time.Minutes)*//*"26 19 * * THU"*//*"0 10 * * FRI"*/ },
-        { TimePeriod.LastDayOfMonth, (Time time) => "*/2 * * * *"/*$"{time.Minutes} {time.Hours} * * SAT"*/ }, //*"0 10 L * *"*/ },
+        { TimePeriod.Friday, (Time time) => Cron.Weekly(DayOfWeek.Saturday, time.Hour, time.Minute) },//*"26 19 * * THU"*//*"0 10 * * FRI"*/ },
+        { TimePeriod.LastDayOfMonth, (Time time) => $"{time.Minute} {time.Hour} * * SAT" }, //*"0 10 L * *"*/ },
         { TimePeriod.MimuteInterval, (Time time) => $"*/{time.MinuteInterval} * * * *" }
     };
 
@@ -36,12 +36,14 @@ internal sealed class ScheduleService
     {
         CheckIfCanSchedule();
 
+        string cronExpression = CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime);
+
         RecurringJob.AddOrUpdate<T>(
                 recurringJobId: job.Id,
                 methodCall: (notificationService) => notificationService.SendAsync(job.Notification),
-                cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime));
+                cronExpression: cronExpression);
 
-        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime.TimePeriod);
+        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, cronExpression);
     }
 
     public void ScheduleAllExceptOnFridays<T>(List<Job> jobs) where T : IConditionedNotificationService
