@@ -13,9 +13,9 @@ internal class NotificationService : IConditionedNotificationService
     public async Task SendAsync(Notification notification) =>
         await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
 
-    public async Task SendByConditionAsync(Notification notification, Func<bool>? sendIfCallback = null)
+    public async Task SendExceptFridaysAsync(Notification notification)
     {
-        if (sendIfCallback == null || sendIfCallback.Invoke()) 
+        if (DateTime.Today.DayOfWeek != DayOfWeek.Friday) 
         {
             await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
         }

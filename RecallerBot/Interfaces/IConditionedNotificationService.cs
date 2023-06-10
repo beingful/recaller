@@ -4,5 +4,5 @@ namespace RecallerBot.Interfaces;
 
 internal interface IConditionedNotificationService : INotificationService
 {
-    public Task SendByConditionAsync(Notification notification, Func<bool> condition);
+    public Task SendExceptFridaysAsync(Notification notification);
 }

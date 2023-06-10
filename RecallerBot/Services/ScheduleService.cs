@@ -41,7 +41,7 @@ internal sealed class ScheduleService
                 methodCall: (notificationService) => notificationService.SendAsync(job.Notification),
                 cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime));
 
-        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime);
+        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime.TimePeriod);
     }
 
     public void ScheduleAllExceptOnFridays<T>(List<Job> jobs) where T : IConditionedNotificationService
@@ -66,13 +66,13 @@ internal sealed class ScheduleService
     {
         CheckIfCanSchedule();
 
-        RecurringJob.AddOrUpdate<NotificationService>(
+        RecurringJob.AddOrUpdate<T>(
                 recurringJobId: job.Id,
                 methodCall: (notificationService) => notificationService
-                .SendByConditionAsync(job.Notification, () => DateTime.Today.DayOfWeek != DayOfWeek.Friday),
+                .SendExceptFridaysAsync(job.Notification),
                 cronExpression: CronExpressions[job.TriggerTime.TimePeriod](job.TriggerTime));
 
-        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime);
+        _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime.TimePeriod);
     }
 
     private void CheckIfCanSchedule()

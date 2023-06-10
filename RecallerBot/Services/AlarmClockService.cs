@@ -1,6 +1,5 @@
 ﻿using RecallerBot.Constants;
 using RecallerBot.Enums;
-using RecallerBot.Models;
 using RecallerBot.Models.Schedule;
 
 namespace RecallerBot.Services;
