@@ -1,34 +1,32 @@
-﻿using RecallerBot.Models;
-using RecallerBot.Constants;
+﻿using RecallerBot.Constants;
 using RecallerBot.Interfaces;
+using RecallerBot.Models.Configuration;
 
 namespace RecallerBot.Services;
 
 internal sealed class WebhookService : IHostedService
 {
-    private readonly BotConfiguration _botConfiguration;
+    private readonly Bot _bot;
     private readonly IBotEndpointService _botEndpointService;
     private readonly ILogger<WebhookService> _logger;
 
     public WebhookService(
-        BotConfiguration botConfiguration,
+        Bot bot,
         IBotEndpointService botEndpointService,
         ILogger<WebhookService> logger)
     {
-        _botConfiguration = botConfiguration;
+        _bot = bot;
         _botEndpointService = botEndpointService;
         _logger = logger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var webhookAddress = @$"{_botConfiguration.HostAddress}/bot/{_botConfiguration.EscapedBotToken}";
-
-        _logger.LogInformation(LogMessages.SetWebhook, webhookAddress);
+        _logger.LogInformation(LogMessages.SetWebhook, _bot.WebhookUrl);
 
         try
         {
-            await _botEndpointService.SetWebhookAsync(webhookAddress, cancellationToken);
+            await _botEndpointService.SetWebhookAsync(_bot.WebhookUrl, cancellationToken);
         }
         catch (Exception exception)
         {

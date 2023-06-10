@@ -1,5 +1,5 @@
 ﻿using RecallerBot.Constants;
-using RecallerBot.Models;
+using RecallerBot.Models.Configuration;
 using Telegram.Bot.Types;
 
 namespace RecallerBot.Services;
@@ -9,21 +9,18 @@ internal sealed class ChatMessageService
     private readonly Dictionary<string, string> _allowedChats;
     private readonly Dictionary<string, Enums.BotCommand> _allowedCommands;
 
-    public ChatMessageService(BotConfiguration botConfiguration, IConfiguration configuration)
+    public ChatMessageService(Bot bot)
     {
-        _allowedChats = configuration
-                            .GetSection(ConfigurationConstants.AllowedChats)
-                            .Get<Dictionary<string, string>>()!;
-
+        _allowedChats = bot.AllowedChats;
         _allowedCommands = new()
         {
-            { $"/start{botConfiguration.BotUsername}", Enums.BotCommand.Start },
-            { $"/stop{botConfiguration.BotUsername}", Enums.BotCommand.Stop },
-            { $"/test{botConfiguration.BotUsername}", Enums.BotCommand.AlarmClock }
+            { $"/start{bot.Username}", Enums.BotCommand.Start },
+            { $"/stop{bot.Username}", Enums.BotCommand.Stop },
+            { $"/test{bot.Username}", Enums.BotCommand.AlarmClock }
         };
     }
 
-    public long TestChat => Convert.ToInt64(_allowedChats[Chats.TestChat]);
+    public long TestChat => Convert.ToInt64(_allowedChats[nameof(TestChat)]);
 
     public bool IsChatAllowed(Message message) =>
         _allowedChats.ContainsValue($"{message.Chat.Id}");

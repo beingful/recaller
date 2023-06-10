@@ -3,7 +3,7 @@ using Hangfire.Storage;
 using RecallerBot.Activator;
 using RecallerBot.Constants;
 using RecallerBot.Interfaces;
-using RecallerBot.Models;
+using RecallerBot.Models.Configuration;
 using RecallerBot.Resolvers;
 using RecallerBot.Services;
 using Telegram.Bot;
@@ -21,14 +21,14 @@ internal static class ServiceCollectionExtensions
                     .Build();
             });
 
-    public static IServiceCollection AddBotConfiguration(this IServiceCollection services, BotConfiguration configuration) =>
-        services.AddSingleton<BotConfiguration>(configuration);
+    public static IServiceCollection AddBotConfiguration(this IServiceCollection services, Bot bot) =>
+        services.AddSingleton<Bot>(bot);
 
-    public static IServiceCollection AddWebhook(this IServiceCollection services, BotConfiguration configuration)
+    public static IServiceCollection AddWebhook(this IServiceCollection services, Bot bot)
     {
         services
             .AddHttpClient(WebhookConstants.Name)
-            .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(configuration.BotToken, httpClient));
+            .AddTypedClient<ITelegramBotClient>(httpClient => new TelegramBotClient(bot.Token, httpClient));
 
         return services;
     }

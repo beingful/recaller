@@ -1,5 +1,9 @@
-﻿using RecallerBot.Models;
-using RecallerBot.Extensions;
+﻿using RecallerBot.Extensions;
+using Flurl.Http.Configuration;
+using Flurl.Http;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
+using RecallerBot.Models.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +12,8 @@ builder.Logging.AddAzureWebAppDiagnostics();
 builder.Services.SetConfiguration();
 
 var botConfiguration = builder.Configuration
-                                .GetSection(nameof(BotConfiguration))
-                                .Get<BotConfiguration>()!;
+                                .GetSection(nameof(Bot))
+                                .Get<Bot>()!;
 
 builder.Services
     .AddBotConfiguration(botConfiguration)
@@ -18,6 +22,19 @@ builder.Services
     .AddScheduling()
     .AddRequestHandling()
     .AddSwagger();
+
+FlurlHttp.Configure(settings =>
+{
+    settings.JsonSerializer = new NewtonsoftJsonSerializer(new JsonSerializerSettings
+    {
+        NullValueHandling = NullValueHandling.Ignore,
+        ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new SnakeCaseNamingStrategy()
+        },
+        MissingMemberHandling = MissingMemberHandling.Ignore
+    });
+});
 
 var app = builder.Build();
 

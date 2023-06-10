@@ -1,6 +1,7 @@
 ﻿using Hangfire;
 using RecallerBot.Constants;
 using RecallerBot.Models;
+using RecallerBot.Models.Configuration;
 using RecallerBot.Services;
 using Telegram.Bot;
 
@@ -14,7 +15,7 @@ internal static class WebApplicationExtensions
         webApp.MapHangfireDashboard();
     }
 
-    public static void AddPost(this WebApplication webApp, BotConfiguration configuration) =>
+    public static void AddPost(this WebApplication webApp, Bot configuration) =>
         webApp
             .MapPost($"/bot/{configuration.EscapedBotToken}",
                     async (ITelegramBotClient botClient,
