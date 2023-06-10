@@ -23,7 +23,7 @@ internal class TimeSheetService
                 {
                     TimePeriod = TimePeriod.Friday,
                     Hours = 23,
-                    Minutes = 07
+                    Minutes = 15
                 }),
             new(message: NotificationMessages.LastReminder,
                 chatId: chatId,
@@ -31,7 +31,7 @@ internal class TimeSheetService
                 {
                     TimePeriod = TimePeriod.Friday,
                     Hours = 23,
-                    Minutes = 10
+                    Minutes = 17
                 })
         });
 
@@ -43,7 +43,7 @@ internal class TimeSheetService
                 {
                     TimePeriod = TimePeriod.LastDayOfMonth,
                     Hours = 23,
-                    Minutes = 57
+                    Minutes = 15
                 }),
             new(message: NotificationMessages.LastReminder,
                 chatId: chatId,
@@ -51,7 +51,7 @@ internal class TimeSheetService
                 {
                     TimePeriod = TimePeriod.LastDayOfMonth,
                     Hours = 23,
-                    Minutes = 00
+                    Minutes = 17
                 })
         });
     }
