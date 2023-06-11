@@ -23,8 +23,8 @@ internal sealed class ScheduleService
 
     public Dictionary<TimePeriod, Func<Time, string>> CronExpressions => new()
     {
-        { TimePeriod.Friday, (Time time) => Cron.Weekly(DayOfWeek.Sunday, time.Hour, time.Minute) },//*"26 19 * * THU"*//*"0 10 * * FRI"*/ },
-        { TimePeriod.LastDayOfMonth, (Time time) => $"{time.Minute} {time.Hour} * * SUN" }, //*"0 10 L * *"*/ },
+        { TimePeriod.Friday, (Time time) => Cron.Daily(time.Hour, time.Minute) },//*"26 19 * * THU"*//*"0 10 * * FRI"*/ },
+        { TimePeriod.LastDayOfMonth, (Time time) => $"{time.Minute} {time.Hour} * * *" }, //*"0 10 L * *"*/ },
         { TimePeriod.MimuteInterval, (Time time) => $"*/{time.MinuteInterval} * * * *" }
     };
 
