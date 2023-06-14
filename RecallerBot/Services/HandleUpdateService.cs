@@ -45,22 +45,20 @@ internal sealed class HandleUpdateService
             {
                 try
                 {
-                    HandleMessage(message);
-
-                    await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.OK}");
+                    await HandleMessage(message);
                 }
                 catch (Exception exception)
                 {
                     _logger.LogError(ErrorMessages.GeneralError, exception.Message, exception.StackTrace);
 
-                    await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.NotImplemented}");
+                    await SendMessageAsync(message.Chat.Id, HttpStatusCode.NotImplemented);
                 }
             }
             else
             {
                 _logger.LogInformation(LogMessages.ChatNotAllowed);
 
-                await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.Forbidden}");
+                await SendMessageAsync(message.Chat.Id, HttpStatusCode.Forbidden);
             }
         }
         else
@@ -69,7 +67,7 @@ internal sealed class HandleUpdateService
         }
     }
 
-    private async void HandleMessage(Message message)
+    private async Task HandleMessage(Message message)
     {
         _logger.LogInformation(LogMessages.StartHandleMessage);
 
@@ -78,18 +76,24 @@ internal sealed class HandleUpdateService
         if (command == Enums.BotCommand.Start)
         {
             _timeSheetService.StartNotifying(message.Chat.Id);
+
+            await SendMessageAsync(message.Chat.Id, HttpStatusCode.OK);
         }
         else if (command == Enums.BotCommand.Stop)
         {
             _timeSheetService.StopNotifying(message.Chat.Id);
+
+            await SendMessageAsync(message.Chat.Id, HttpStatusCode.OK);
         }
         else if (command == Enums.BotCommand.Wakey)
         {
             _alarmClockService.SetUp();
+
+            await SendMessageAsync(message.Chat.Id, HttpStatusCode.OK);
         }
         else if (command == Enums.BotCommand.Awake)
         {
-            await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.Processing}");
+            await SendMessageAsync(message.Chat.Id, HttpStatusCode.Processing);
         }
     }
 
@@ -98,4 +102,7 @@ internal sealed class HandleUpdateService
         {
             _logger.LogInformation(LogMessages.NotTextMessage);
         });
+
+    private async Task SendMessageAsync(long chatId, HttpStatusCode statusCode) =>
+        await _botMessageService.SendTextMessageAsync(chatId, $"{statusCode}");
 }

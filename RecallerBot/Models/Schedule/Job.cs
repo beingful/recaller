@@ -12,7 +12,7 @@ internal sealed class Job
 
     public Job(string message, long chatId, Time triggerTime)
     {
-        Id = $"{chatId}-{message.Replace(" ", "-")}-{triggerTime.TimePeriod}";
+        Id = $"{chatId}-{Guid.NewGuid()}";
         Notification = new(chatId, message);
         TriggerTime = triggerTime;
     }
