@@ -1,5 +1,4 @@
-﻿using RecallerBot.Constants;
-using RecallerBot.Enums;
+﻿using RecallerBot.Enums;
 using RecallerBot.Models.Schedule;
 
 namespace RecallerBot.Services;
@@ -15,15 +14,13 @@ internal sealed class AlarmClockService
         _chatMessageService = chatMessageService;
     }
 
-    public void SetUp()
-    {
+    public void SetUp() =>
         _scheduleService.Schedule<BotRequestService>(new Job(
-            message: NotificationMessages.AlarmClockReminder,
+            message: _chatMessageService.ToMessage(BotCommand.Awake),
             chatId: _chatMessageService.TestChat,
             triggerTime: new Time
             {
                 TimePeriod = TimePeriod.MimuteInterval,
                 MinuteInterval = 10
             }));
-    }
 }

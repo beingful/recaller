@@ -69,11 +69,11 @@ internal sealed class HandleUpdateService
         }
     }
 
-    private void HandleMessage(Message message)
+    private async void HandleMessage(Message message)
     {
         _logger.LogInformation(LogMessages.StartHandleMessage);
 
-        Enums.BotCommand command = _chatMessageService.MapToCommand(message);
+        Enums.BotCommand command = _chatMessageService.ToBotCommand(message);
 
         if (command == Enums.BotCommand.Start)
         {
@@ -81,11 +81,15 @@ internal sealed class HandleUpdateService
         }
         else if (command == Enums.BotCommand.Stop)
         {
-            _timeSheetService.UnscheduleNotifications(message.Chat.Id);
+            _timeSheetService.StopNotifying(message.Chat.Id);
         }
-        else if (command == Enums.BotCommand.AlarmClock)
+        else if (command == Enums.BotCommand.Wakey)
         {
             _alarmClockService.SetUp();
+        }
+        else if (command == Enums.BotCommand.Awake)
+        {
+            await _botMessageService.SendTextMessageAsync(message.Chat.Id, $"{HttpStatusCode.Processing}");
         }
     }
 

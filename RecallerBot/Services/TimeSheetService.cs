@@ -56,6 +56,6 @@ internal class TimeSheetService
         });
     }
 
-    public void UnscheduleNotifications(long chatId) =>
+    public void StopNotifying(long chatId) =>
         _scheduleService.UnscheduleByEndpoint(chatId);
 }

@@ -15,7 +15,8 @@ internal sealed class ChatMessageService
         {
             { $"/start{bot.Username}", Enums.BotCommand.Start },
             { $"/stop{bot.Username}", Enums.BotCommand.Stop },
-            { $"/test{bot.Username}", Enums.BotCommand.AlarmClock }
+            { $"/wakey{bot.Username}", Enums.BotCommand.Wakey },
+            { $"/awake{bot.Username}",  Enums.BotCommand.Awake }
         };
     }
 
@@ -27,8 +28,13 @@ internal sealed class ChatMessageService
     public bool IsCommandRecognized(Message message) =>
         message.Text != null && _allowedCommands.ContainsKey(message.Text);
 
-    public Enums.BotCommand MapToCommand(Message message) =>
+    public Enums.BotCommand ToBotCommand(Message message) =>
         message.Text != null && _allowedCommands.TryGetValue(message.Text, out var command)
-        ? command
-        : Enums.BotCommand.Undefined;
+            ? command
+            : Enums.BotCommand.Undefined;
+
+    public string ToMessage(Enums.BotCommand botCommand) =>
+        _allowedCommands
+            .FirstOrDefault(command => command.Value.Equals(botCommand))
+            .Key;
 }
