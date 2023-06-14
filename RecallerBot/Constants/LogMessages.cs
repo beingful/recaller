@@ -18,6 +18,8 @@ internal static class LogMessages
 
     public const string JobScheduled = "The job with message {message} and time period {timePeriod} is scheduled";
 
+    public const string JobsNumber = "There are {jobsNumber} jobs scheduled";
+
     public const string JobsWithEndpointUnscheduled = "Jobs with endpoint {endpoint} are unscheduled. Current number of jobs: {jobsNumber}";
 
     public const string BotDoesNotSleep = "Bot does not sleep";

@@ -85,6 +85,8 @@ internal sealed class ScheduleService
 
     private void CheckIfCanSchedule()
     {
+        _logger.LogInformation(LogMessages.JobsNumber, _storageConnection.GetRecurringJobs().Count);
+
         if (_storageConnection.GetRecurringJobs().Count == _maximumRecurringJobsNumber)
         {
             throw new Exception(ErrorMessages.ScheduleOverflowing);
