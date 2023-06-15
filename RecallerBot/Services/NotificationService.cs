@@ -19,7 +19,7 @@ internal class NotificationService : IConditionedNotificationService
 
     public async Task SendExceptFridaysAsync(Notification notification)
     {
-        if (DateTime.Today.DayOfWeek != DayOfWeek.Friday) 
+        if (DateTime.Today.DayOfWeek != DayOfWeek.Thursday) 
         {
             await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
         }
