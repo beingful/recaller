@@ -1,7 +1,6 @@
 ﻿using RecallerBot.Interfaces;
 using RecallerBot.Models;
 using RecallerBot.Providers;
-using System;
 
 namespace RecallerBot.Services;
 
