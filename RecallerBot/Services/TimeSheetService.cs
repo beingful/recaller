@@ -22,16 +22,16 @@ internal class TimeSheetService
                 triggerTime: new Time
                 {
                     TimePeriod = TimePeriod.Friday,
-                    Hour = 23,
-                    Minute = 20
+                    Hour = 0,
+                    Minute = 3
                 }),
             new(message: NotificationMessages.LastReminder,
                 chatId: chatId,
                 triggerTime: new Time
                 {
                     TimePeriod = TimePeriod.Friday,
-                    Hour = 23,
-                    Minute = 23
+                    Hour = 0,
+                    Minute = 5
                 })
         });
 
@@ -42,16 +42,16 @@ internal class TimeSheetService
                 triggerTime: new Time
                 {
                     TimePeriod = TimePeriod.LastDayOfMonth,
-                    Hour = 23,
-                    Minute = 20
+                    Hour = 0,
+                    Minute = 3
                 }),
             new(message: NotificationMessages.LastReminder,
                 chatId: chatId,
                 triggerTime: new Time
                 {
                     TimePeriod = TimePeriod.LastDayOfMonth,
-                    Hour = 23,
-                    Minute = 23
+                    Hour = 0,
+                    Minute = 5
                 })
         });
     }

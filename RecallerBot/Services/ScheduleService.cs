@@ -4,7 +4,7 @@ using RecallerBot.Constants;
 using RecallerBot.Enums;
 using RecallerBot.Interfaces;
 using RecallerBot.Models.Schedule;
-using RecallerBot.Resolvers;
+using RecallerBot.Providers;
 
 namespace RecallerBot.Services;
 
@@ -23,8 +23,8 @@ internal sealed class ScheduleService
 
     public Dictionary<TimePeriod, Func<Time, string>> CronExpressions => new()
     {
-        { TimePeriod.Friday, (Time time) => Cron.Weekly(DayOfWeek.Thursday, time.Hour, time.Minute) },
-        { TimePeriod.LastDayOfMonth, (Time time) => Cron.Weekly(DayOfWeek.Thursday, time.Hour, time.Minute)/*$"{time.Minute} {time.Hour} L * *"*/ },
+        { TimePeriod.Friday, (Time time) => Cron.Weekly(DayOfWeek.Friday, time.Hour, time.Minute) },
+        { TimePeriod.LastDayOfMonth, (Time time) => $"{time.Minute} {time.Hour} L * *" },
         { TimePeriod.MimuteInterval, (Time time) => $"*/{time.MinuteInterval} * * * *" }
     };
 

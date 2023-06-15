@@ -1,4 +1,4 @@
-﻿namespace RecallerBot.Resolvers;
+﻿namespace RecallerBot.Providers;
 
 internal static class TimeZoneProvider
 {

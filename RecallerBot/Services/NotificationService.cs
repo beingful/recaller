@@ -1,17 +1,17 @@
 ﻿using RecallerBot.Interfaces;
 using RecallerBot.Models;
+using RecallerBot.Providers;
+using System;
 
 namespace RecallerBot.Services;
 
 internal class NotificationService : IConditionedNotificationService
 {
     private readonly IBotMessageService _botMessageService;
-    private readonly ILogger<NotificationService> _logger;
 
-    public NotificationService(IBotMessageService botMessageService, ILogger<NotificationService> logger)
+    public NotificationService(IBotMessageService botMessageService)
     {
         _botMessageService = botMessageService;
-        _logger = logger;
     }
 
     public async Task SendAsync(Notification notification) =>
@@ -19,7 +19,7 @@ internal class NotificationService : IConditionedNotificationService
 
     public async Task SendExceptFridaysAsync(Notification notification)
     {
-        if (DateTime.Today.DayOfWeek != DayOfWeek.Friday) 
+        if (TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneProvider.GetTimeZone()).DayOfWeek != DayOfWeek.Friday) 
         {
             await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
         }
