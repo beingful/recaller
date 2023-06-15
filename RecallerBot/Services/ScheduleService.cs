@@ -47,6 +47,7 @@ internal sealed class ScheduleService
                 });
 
         _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime.TimePeriod);
+        _logger.LogInformation(LogMessages.JobsNumber, _storageConnection.GetRecurringJobs().Count);
     }
 
     public void ScheduleAllExceptOnFridays<T>(List<Job> jobs) where T : IConditionedNotificationService
@@ -54,11 +55,13 @@ internal sealed class ScheduleService
         jobs.ForEach(job => ScheduleExceptOnFridays<T>(job));
     }
 
-    public void UnscheduleByEndpoint(long endpoint)
+    public void UnscheduleByEndpoint(string endpoint)
     {
+        CheckIfCanUnschedule(endpoint);
+
         _storageConnection.GetRecurringJobs().ForEach(job =>
         {
-            if (job.Id.Contains(endpoint.ToString()))
+            if (job.Id.Contains(endpoint))
             {
                 RecurringJob.RemoveIfExists(job.Id);
             }
@@ -81,15 +84,22 @@ internal sealed class ScheduleService
                 });
 
         _logger.LogInformation(LogMessages.JobScheduled, job.Notification.Text, job.TriggerTime.TimePeriod);
+        _logger.LogInformation(LogMessages.JobsNumber, _storageConnection.GetRecurringJobs().Count);
     }
 
     private void CheckIfCanSchedule()
     {
-        _logger.LogInformation(LogMessages.JobsNumber, _storageConnection.GetRecurringJobs().Count);
-
         if (_storageConnection.GetRecurringJobs().Count == _maximumRecurringJobsNumber)
         {
             throw new Exception(ErrorMessages.ScheduleOverflowing);
+        }
+    }
+
+    private void CheckIfCanUnschedule(string endpoint)
+    {
+        if (!_storageConnection.GetRecurringJobs().Any(job => job.Id.Contains(endpoint)))
+        {
+            throw new Exception(ErrorMessages.CanNotUnscheduleJobs);
         }
     }
 }

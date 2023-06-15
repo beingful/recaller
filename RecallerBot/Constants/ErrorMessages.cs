@@ -6,5 +6,7 @@ internal static class ErrorMessages
 
     public const string ScheduleOverflowing = "Can not schedule the job. The maximum number of jobs is already reached";
 
+    public const string CanNotUnscheduleJobs = "Can not unschedule jobs. There are no jobs wich could be uncheduled";
+
     public const string CanNotRequestBot = "Can not call bot with url {url}";
 }
