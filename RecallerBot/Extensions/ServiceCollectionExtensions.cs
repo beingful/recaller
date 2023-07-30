@@ -21,23 +21,27 @@ internal static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
+        //services
+        //    .AddAuthentication()
+        //    .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
+        //    {
+        //        Authentication authentication = configuration
+        //                                    .GetSection(nameof(Authentication))
+        //                                    .Get<Authentication>()!;
+
+        //        options.Authority = authentication.Authority;
+        //        options.ClientId = configuration["AzureAd:ClientId"];
+        //        options.ClientSecret = configuration["AzureAd:ClientSecret"];
+        //        options.RequireHttpsMetadata = false;
+        //        options.SaveTokens = true;
+        //        options.GetClaimsFromUserInfoEndpoint = true;
+        //        options.Scope.Add("email");
+        //        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+        //    });
+
         services
             .AddAuthentication()
-            .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
-            {
-                Authentication authentication = configuration
-                                            .GetSection(nameof(Authentication))
-                                            .Get<Authentication>()!;
-
-                options.Authority = authentication.Authority;
-                options.ClientId = configuration["AzureAd:ClientId"];
-                options.ClientSecret = configuration["AzureAd:ClientSecret"];
-                options.RequireHttpsMetadata = false;
-                options.SaveTokens = true;
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.Scope.Add("email");
-                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
-            });
+            .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
 
         //services
         //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
