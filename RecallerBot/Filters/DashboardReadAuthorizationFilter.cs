@@ -21,7 +21,11 @@ public sealed class DashboardReadAuthorizationFilter : IDashboardAuthorizationFi
 
         var claim = httpContext.User.Claims.FirstOrDefault(x => x.Type == _hangfireAccess.ClaimName);
 
-        _logger.LogInformation("Check claim {claimType} with value {claimValue}", claim?.Type, claim?.Value);
+        string claims = string.Empty;
+
+        httpContext.User.Claims.ToList().ForEach(claim => claims += $"(\n{claim.Type}, {claim.Value})\n");
+
+        _logger.LogInformation(claims);
 
         return httpContext.User.Identity?.IsAuthenticated ?? false
             && httpContext.User.Claims.Any(claim =>
