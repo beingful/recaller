@@ -25,7 +25,7 @@ public sealed class DashboardReadAuthorizationFilter : IDashboardAuthorizationFi
 
         httpContext.User.Claims.ToList().ForEach(claim => claims += $"(\n{claim.Type}, {claim.Value})\n");
 
-        _logger.LogInformation(claims);
+        _logger.LogInformation("Claims: " + claims);
 
         return httpContext.User.Identity?.IsAuthenticated ?? false
             && httpContext.User.Claims.Any(claim =>
