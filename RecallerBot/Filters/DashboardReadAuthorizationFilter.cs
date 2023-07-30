@@ -21,11 +21,11 @@ public sealed class DashboardReadAuthorizationFilter : IDashboardAuthorizationFi
 
         var claim = httpContext.User.Claims.FirstOrDefault(x => x.Type == _hangfireAccess.ClaimName);
 
-        string claims = string.Empty;
+        //string claims = string.Empty;
 
-        httpContext.User.Claims.ToList().ForEach(claim => claims += $"(\n{claim.Type}, {claim.Value})\n");
+        //httpContext.User.Claims.ToList().ForEach(claim => claims += $"(\n{claim.Type}, {claim.Value})\n");
 
-        _logger.LogInformation("Claims: " + claims);
+        _logger.LogInformation("Access token: " + httpContext.Request.Headers["Authorization"]);
 
         return httpContext.User.Identity?.IsAuthenticated ?? false
             && httpContext.User.Claims.Any(claim =>
