@@ -16,21 +16,21 @@ internal static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
-        //services
-        //    .AddAuthentication()
-        //    .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
-
         services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => 
-            {
-                Authentication authentication = configuration
-                                            .GetSection(nameof(Authentication))
-                                            .Get<Authentication>()!;
+            .AddAuthentication()
+            .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
 
-                options.Authority = authentication.Authority;
-                options.Audience = authentication.Audience;
-            });
+        //services
+        //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //    .AddJwtBearer(options => 
+        //    {
+        //        Authentication authentication = configuration
+        //                                    .GetSection(nameof(Authentication))
+        //                                    .Get<Authentication>()!;
+
+        //        options.Authority = authentication.Authority;
+        //        options.Audience = authentication.Audience;
+        //    });
 
         return services;
     }
