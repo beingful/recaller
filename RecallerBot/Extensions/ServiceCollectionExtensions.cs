@@ -31,7 +31,6 @@ internal static class ServiceCollectionExtensions
 
                 options.Authority = authentication.Authority;
                 options.ClientId = configuration["AzureAd:ClientId"];
-                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
                 options.ClientSecret = configuration["AzureAd:ClientSecret"];
                 options.RequireHttpsMetadata = false;
                 options.SaveTokens = true;
