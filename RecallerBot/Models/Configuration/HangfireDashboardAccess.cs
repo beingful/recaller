@@ -4,7 +4,7 @@ namespace RecallerBot.Models.Configuration;
 
 public sealed class HangfireDashboardAccess
 {
-    public string ClaimName { get; set; }
+    public string ClaimType { get; set; }
 
     public string ClaimValue { get; set; }
 }

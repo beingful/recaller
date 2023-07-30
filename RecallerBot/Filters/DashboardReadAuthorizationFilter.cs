@@ -1,4 +1,5 @@
 ﻿using Hangfire.Dashboard;
+using Microsoft.Extensions.Logging;
 using RecallerBot.Models.Configuration;
 
 namespace RecallerBot.Filters;
@@ -19,18 +20,19 @@ public sealed class DashboardReadAuthorizationFilter : IDashboardAuthorizationFi
     {
         HttpContext httpContext = context.GetHttpContext();
 
-        var claim = httpContext.User.Claims.FirstOrDefault(x => x.Type == _hangfireAccess.ClaimName);
+        //var claim = httpContext.User.Claims.FirstOrDefault(x => x.Type == _hangfireAccess.ClaimName);
 
         string headers = string.Empty;
 
         httpContext.Request.Headers.Keys.ToList().ForEach(header => headers += $"{header},");
 
         _logger.LogInformation("All headers: " + headers);
+        _logger.LogInformation("Azure AD access token: " + httpContext.Request.Headers[_hangfireAccess.ClaimType]);
 
         return httpContext.User.Identity?.IsAuthenticated ?? false
             && httpContext.User.Claims.Any(claim =>
                 {
-                    return claim.Type == _hangfireAccess.ClaimName
+                    return claim.Type == _hangfireAccess.ClaimType
                         && claim.Value == _hangfireAccess.ClaimValue;
                 });
     }
