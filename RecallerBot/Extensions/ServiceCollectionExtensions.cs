@@ -1,13 +1,18 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RecallerBot.Activator;
 using RecallerBot.Constants;
 using RecallerBot.Interfaces;
 using RecallerBot.Models.Configuration;
 using RecallerBot.Services;
+using System.Security.Claims;
 using Telegram.Bot;
 
 namespace RecallerBot.Extensions;
@@ -18,7 +23,22 @@ internal static class ServiceCollectionExtensions
     {
         services
             .AddAuthentication()
-            .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
+            .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
+            {
+                Authentication authentication = configuration
+                                            .GetSection(nameof(Authentication))
+                                            .Get<Authentication>()!;
+
+                options.Authority = authentication.Authority;
+                options.ClientId = configuration["AzureAd:ClientId"];
+                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                options.ClientSecret = configuration["AzureAd:ClientSecret"];
+                options.RequireHttpsMetadata = false;
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.Scope.Add("email");
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+            });
 
         //services
         //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
