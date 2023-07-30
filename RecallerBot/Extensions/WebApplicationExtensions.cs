@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using RecallerBot.Constants;
+using RecallerBot.Filters;
 using RecallerBot.Models;
 using RecallerBot.Models.Configuration;
 using RecallerBot.Services;
@@ -11,8 +12,20 @@ internal static class WebApplicationExtensions
 {
     public static void AddHangfireDashboard(this WebApplication webApp)
     {
-        webApp.UseHangfireDashboard();
-        webApp.MapHangfireDashboard();
+        HangfireDashboardAccess dashboardAccess = webApp.Configuration
+                                    .GetSection(nameof(HangfireDashboardAccess))
+                                    .Get<HangfireDashboardAccess>()!;
+
+        ILogger<DashboardReadAuthorizationFilter> logger = LoggerFactory
+            .Create(builder =>
+            {
+                builder.AddAzureWebAppDiagnostics();
+            }).CreateLogger<DashboardReadAuthorizationFilter>();
+
+        webApp.UseHangfireDashboard(options: new DashboardOptions()
+        {
+            Authorization = new[] {new DashboardReadAuthorizationFilter(dashboardAccess, logger) }
+        });
     }
 
     public static void AddPost(this WebApplication webApp, Bot configuration) =>

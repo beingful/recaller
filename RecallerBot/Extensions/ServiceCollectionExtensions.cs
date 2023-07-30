@@ -4,7 +4,6 @@ using RecallerBot.Activator;
 using RecallerBot.Constants;
 using RecallerBot.Interfaces;
 using RecallerBot.Models.Configuration;
-using RecallerBot.Providers;
 using RecallerBot.Services;
 using Telegram.Bot;
 
