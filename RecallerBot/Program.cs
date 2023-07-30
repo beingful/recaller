@@ -16,6 +16,7 @@ var botConfiguration = builder.Configuration
                                 .Get<Bot>()!;
 
 builder.Services
+    .AddAzureAuthentication(builder.Configuration)
     .AddBotConfiguration(botConfiguration)
     .AddWebhook(botConfiguration)
     .AddBotServices()
@@ -37,6 +38,8 @@ FlurlHttp.Configure(settings =>
 });
 
 var app = builder.Build();
+
+app.UseAuthentication();
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>

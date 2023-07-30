@@ -1,5 +1,8 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Web;
 using RecallerBot.Activator;
 using RecallerBot.Constants;
 using RecallerBot.Interfaces;
@@ -11,6 +14,27 @@ namespace RecallerBot.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        //services
+        //    .AddAuthentication()
+        //    .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
+
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => 
+            {
+                Authentication authentication = configuration
+                                            .GetSection(nameof(Authentication))
+                                            .Get<Authentication>()!;
+
+                options.Authority = authentication.Authority;
+                options.Audience = authentication.Audience;
+            });
+
+        return services;
+    }
+
     public static IServiceCollection SetConfiguration(this IServiceCollection services) =>
         services
             .AddTransient<IConfiguration>(sp =>
