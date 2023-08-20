@@ -21,25 +21,28 @@ internal static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
-        //services
-        //    .AddAuthentication()
-        //    .AddAzureADBearer(options => configuration.Bind("AzureAd", options))
-        //    .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
-        //    {
-        //        Authentication authentication = configuration
-        //                                    .GetSection(nameof(Authentication))
-        //                                    .Get<Authentication>()!;
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
+            {
+                Authentication authentication = configuration
+                                            .GetSection(nameof(Authentication))
+                                            .Get<Authentication>()!;
 
-        //        options.Authority = authentication.Authority;
-        //        options.ClientId = configuration["AzureAd:ClientId"];
-        //        options.ClientSecret = configuration["AzureAd:ClientSecret"];
-        //        options.RequireHttpsMetadata = false;
-        //        options.GetClaimsFromUserInfoEndpoint = true;
-        //        options.ResponseType = OpenIdConnectResponseType.Code;
-        //        options.SaveTokens = true;
-        //        //options.Scope.Add("email");
-        //        //options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
-        //    });
+                options.Authority = authentication.Authority;
+                options.ClientId = configuration["AzureAd:ClientId"];
+                options.ClientSecret = configuration["AzureAd:ClientSecret"];
+                options.RequireHttpsMetadata = false;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.ResponseType = OpenIdConnectResponseType.Code;
+                options.SaveTokens = true;
+                //options.Scope.Add("email");
+                options.ClaimActions.MapAll();
+            });
 
         //services
         //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -52,17 +55,17 @@ internal static class ServiceCollectionExtensions
         //    options => configuration.Bind("AzureAd", options));
 
         //configuration.GetSection("AzureAd");
-        services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                Authentication authentication = configuration
-                                            .GetSection(nameof(Authentication))
-                                            .Get<Authentication>()!;
+        //services
+        //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //    .AddJwtBearer(options =>
+        //    {
+        //        Authentication authentication = configuration
+        //                                    .GetSection(nameof(Authentication))
+        //                                    .Get<Authentication>()!;
 
-                options.Authority = authentication.Authority;
-                options.Audience = authentication.Audience;
-            });
+        //        options.Authority = authentication.Authority;
+        //        options.Audience = authentication.Audience;
+        //    });
 
         return services;
     }
