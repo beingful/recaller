@@ -22,24 +22,24 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
-            .AddMicrosoftIdentityWebApiAuthentication(configuration);
-        //services
-        //    .AddAuthentication()
-        //    .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
-        //    {
-        //        Authentication authentication = configuration
-        //                                    .GetSection(nameof(Authentication))
-        //                                    .Get<Authentication>()!;
+            .AddAuthentication()
+            .AddAzureADBearer(options => configuration.Bind("AzureAd", options))
+            .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
+            {
+                Authentication authentication = configuration
+                                            .GetSection(nameof(Authentication))
+                                            .Get<Authentication>()!;
 
-        //        options.Authority = authentication.Authority;
-        //        options.ClientId = configuration["AzureAd:ClientId"];
-        //        options.ClientSecret = configuration["AzureAd:ClientSecret"];
-        //        options.RequireHttpsMetadata = false;
-        //        options.SaveTokens = true;
-        //        options.GetClaimsFromUserInfoEndpoint = true;
-        //        options.Scope.Add("email");
-        //        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
-        //    });
+                options.Authority = authentication.Authority;
+                options.ClientId = configuration["AzureAd:ClientId"];
+                options.ClientSecret = configuration["AzureAd:ClientSecret"];
+                options.RequireHttpsMetadata = false;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.ResponseType = OpenIdConnectResponseType.Code;
+                options.SaveTokens = true;
+                //options.Scope.Add("email");
+                //options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+            });
 
         //services
         //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
