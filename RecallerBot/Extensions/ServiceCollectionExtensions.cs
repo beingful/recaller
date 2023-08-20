@@ -24,22 +24,26 @@ internal static class ServiceCollectionExtensions
     {
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
-            {
-                Authentication authentication = configuration
-                                            .GetSection(nameof(Authentication))
-                                            .Get<Authentication>()!;
+            .AddMicrosoftIdentityWebApi(configuration)
+            .EnableTokenAcquisitionToCallDownstreamApi()
+            .AddMicrosoftGraph()
+            .AddInMemoryTokenCaches();
+        //.AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
+        //{
+        //    Authentication authentication = configuration
+        //                                .GetSection(nameof(Authentication))
+        //                                .Get<Authentication>()!;
 
-                options.Authority = authentication.Authority;
-                options.ClientId = configuration["AzureAd:ClientId"];
-                options.ClientSecret = configuration["AzureAd:ClientSecret"];
-                options.RequireHttpsMetadata = false;
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.ResponseType = OpenIdConnectResponseType.Code;
-                options.SaveTokens = true;
-                options.Scope.Add("email");
-                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
-            });
+        //    options.Authority = authentication.Authority;
+        //    options.ClientId = configuration["AzureAd:ClientId"];
+        //    options.ClientSecret = configuration["AzureAd:ClientSecret"];
+        //    options.RequireHttpsMetadata = false;
+        //    options.GetClaimsFromUserInfoEndpoint = true;
+        //    options.ResponseType = OpenIdConnectResponseType.Code;
+        //    options.SaveTokens = true;
+        //    options.Scope.Add("email");
+        //    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+        //});
 
 
 
