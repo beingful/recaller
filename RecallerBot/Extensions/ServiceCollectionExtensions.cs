@@ -21,6 +21,8 @@ internal static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
+        services
+            .AddMicrosoftIdentityWebApiAuthentication(configuration);
         //services
         //    .AddAuthentication()
         //    .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
@@ -39,15 +41,15 @@ internal static class ServiceCollectionExtensions
         //        options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
         //    });
 
-        services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(options =>
-            {
-                configuration.Bind("AzureAd", options);
+        //services
+        //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //    .AddMicrosoftIdentityWebApp(options =>
+        //    {
+        //        configuration.Bind("AzureAd", options);
 
-                options.TokenValidationParameters.NameClaimType = "name";
-            },
-            options => configuration.Bind("AzureAd", options));
+        //        options.TokenValidationParameters.NameClaimType = "name";
+        //    },
+        //    options => configuration.Bind("AzureAd", options));
 
         //configuration.GetSection("AzureAd");
         //services

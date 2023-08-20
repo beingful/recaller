@@ -23,7 +23,7 @@ public sealed class DashboardReadAuthorizationFilter : IDashboardAuthorizationFi
 
         string headers = string.Empty;
 
-        httpContext.Request.Headers.ToList().ForEach(header => headers += $"\n({header})\n");
+        httpContext.Request.Headers.ToList().ForEach(header => headers += $"\n(key: {header.Key}, value: {header.Value})\n");
 
         _logger.LogInformation($"All headers:{headers}");
 
