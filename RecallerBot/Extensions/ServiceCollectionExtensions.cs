@@ -26,11 +26,8 @@ internal static class ServiceCollectionExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                Authentication authentication = configuration
-                                            .GetSection(nameof(Authentication))
-                                            .Get<Authentication>()!;
-
-                options.Authority = authentication.Authority;
+                options.TokenValidationParameters.NameClaimType = "name";
+                options.TokenValidationParameters.RoleClaimType = "roles";
                 options.TokenValidationParameters.ValidateAudience = false;
             })
             .AddMicrosoftIdentityWebApi(configuration)
