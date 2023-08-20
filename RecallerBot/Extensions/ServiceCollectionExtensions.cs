@@ -26,7 +26,8 @@ internal static class ServiceCollectionExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(configuration)
             .EnableTokenAcquisitionToCallDownstreamApi()
-            .AddMicrosoftGraph(defaultScopes: "email");
+            .AddMicrosoftGraph()
+            .AddInMemoryTokenCaches();
         //services
         //    .AddAuthentication()
         //    .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
