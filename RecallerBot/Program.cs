@@ -41,6 +41,8 @@ var app = builder.Build();
 
 app.UseAuthentication();
 
+app.UseAuthorization();
+
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
