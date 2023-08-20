@@ -14,6 +14,7 @@ using RecallerBot.Models.Configuration;
 using RecallerBot.Services;
 using System.Security.Claims;
 using Telegram.Bot;
+using Microsoft.Identity.Web;
 
 namespace RecallerBot.Extensions;
 
@@ -25,7 +26,7 @@ internal static class ServiceCollectionExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(configuration)
             .EnableTokenAcquisitionToCallDownstreamApi()
-            .AddMicrosoftGraph();
+            .AddMicrosoftGraph(defaultScopes: "email");
         //services
         //    .AddAuthentication()
         //    .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
