@@ -36,8 +36,8 @@ internal static class ServiceCollectionExtensions
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.SaveTokens = true;
-                options.Scope.Add("email");
-                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+                //options.Scope.Add("email");
+                //options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
             });
 
         //services
