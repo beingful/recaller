@@ -22,11 +22,7 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
-            .AddAuthentication(options =>
-            {
-                options.DefaultScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
+            .AddAuthentication()
             .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
             {
                 Authentication authentication = configuration
@@ -40,8 +36,8 @@ internal static class ServiceCollectionExtensions
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.SaveTokens = true;
-                //options.Scope.Add("email");
-                options.ClaimActions.MapAll();
+                options.Scope.Add("email");
+                options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
             });
 
         //services
