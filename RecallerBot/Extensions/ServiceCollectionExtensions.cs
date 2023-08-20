@@ -40,9 +40,16 @@ internal static class ServiceCollectionExtensions
         //    });
 
         services
-            .AddAuthentication()
-            .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"));
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(options =>
+            {
+                configuration.Bind("AzureAd", options);
 
+                options.TokenValidationParameters.NameClaimType = "name";
+            },
+            options => configuration.Bind("AzureAd", options));
+
+        //configuration.GetSection("AzureAd");
         //services
         //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         //    .AddJwtBearer(options => 
