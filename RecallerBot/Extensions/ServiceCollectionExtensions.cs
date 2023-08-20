@@ -24,6 +24,15 @@ internal static class ServiceCollectionExtensions
     {
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                Authentication authentication = configuration
+                                            .GetSection(nameof(Authentication))
+                                            .Get<Authentication>()!;
+
+                options.Authority = authentication.Authority;
+                options.TokenValidationParameters.ValidateAudience = false;
+            })
             .AddMicrosoftIdentityWebApi(configuration)
             .EnableTokenAcquisitionToCallDownstreamApi()
             .AddMicrosoftGraph()
