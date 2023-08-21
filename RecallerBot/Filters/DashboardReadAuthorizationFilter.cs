@@ -19,8 +19,6 @@ public sealed class DashboardReadAuthorizationFilter : IDashboardAuthorizationFi
     {
         HttpContext httpContext = context.GetHttpContext();
 
-        //var claim = httpContext.User.Claims.FirstOrDefault(x => x.Type == _hangfireAccess.ClaimName);
-
         string headers = string.Empty;
 
         httpContext.Request.Headers.ToList().ForEach(header => headers += $"\n(key: {header.Key}, value: {header.Value})\n");

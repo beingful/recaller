@@ -4,6 +4,7 @@ using Flurl.Http;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using RecallerBot.Models.Configuration;
+using RecallerBot.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ var botConfiguration = builder.Configuration
                                 .Get<Bot>()!;
 
 builder.Services
+    .AddHttpContextAccessor()
     .AddAzureAuthentication(builder.Configuration)
     .AddBotConfiguration(botConfiguration)
     .AddWebhook(botConfiguration)
@@ -50,8 +52,15 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 
-app.AddHangfireDashboard();
-
 app.AddPost(botConfiguration);
+
+app.MapGet("/get", (GetService getService) =>
+{
+    string claims = getService.GetClaims();
+
+    return Results.Content(claims);
+});
+
+app.AddHangfireDashboard();
 
 app.Run();

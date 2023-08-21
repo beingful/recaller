@@ -24,10 +24,10 @@ internal static class ServiceCollectionExtensions
     {
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApi(configuration)
-            .EnableTokenAcquisitionToCallDownstreamApi()
-            .AddMicrosoftGraph()
-            .AddInMemoryTokenCaches();
+            .AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"));
+            //.EnableTokenAcquisitionToCallDownstreamApi()
+            //.AddMicrosoftGraph()
+            //.AddInMemoryTokenCaches();
         //.AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
         //{
         //    Authentication authentication = configuration
@@ -39,7 +39,7 @@ internal static class ServiceCollectionExtensions
         //    options.ClientSecret = configuration["AzureAd:ClientSecret"];
         //    options.RequireHttpsMetadata = false;
         //    options.GetClaimsFromUserInfoEndpoint = true;
-        //    options.ResponseType = OpenIdConnectResponseType.Code;
+        //    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
         //    options.SaveTokens = true;
         //    options.Scope.Add("email");
         //    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
@@ -121,7 +121,8 @@ internal static class ServiceCollectionExtensions
         services
             .AddSingleton<IBotEndpointService, TelegramBotService>()
             .AddScoped<IBotMessageService, TelegramBotService>()
-            .AddScoped<ChatMessageService>();
+            .AddScoped<ChatMessageService>()
+            .AddScoped<GetService>();
 
     public static IServiceCollection AddScheduling(this IServiceCollection services) =>
         services

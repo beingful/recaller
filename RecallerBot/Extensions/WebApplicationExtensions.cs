@@ -22,7 +22,9 @@ internal static class WebApplicationExtensions
                 builder.AddAzureWebAppDiagnostics();
             }).CreateLogger<DashboardReadAuthorizationFilter>();
 
-        webApp.UseHangfireDashboard(options: new DashboardOptions()
+        webApp
+            .UseHangfireServer()
+            .UseHangfireDashboard(options: new DashboardOptions()
         {
             Authorization = new[] {new DashboardReadAuthorizationFilter(dashboardAccess, logger) }
         });
