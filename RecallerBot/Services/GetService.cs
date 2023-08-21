@@ -15,11 +15,11 @@ public class GetService
     {
         HttpContext httpContext = _httpContextAccessor.HttpContext!;
 
-        string claims = string.Empty;
+        string claims = "All claims: ";
 
         httpContext.User.Claims.ToList().ForEach(claim => claims += $"\n({claim.Type}, {claim.Value})\n");
 
-        _logger.LogInformation("All claims: " + claims);
+        _logger.LogInformation(claims);
 
         return claims;
     }
