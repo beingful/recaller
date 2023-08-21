@@ -58,7 +58,7 @@ app.MapGet("/get", (GetService getService) =>
 {
     string claims = getService.GetClaims();
 
-    return Results.Content(claims);
+    return Results.Ok(new { Value = claims });
 });
 
 app.AddHangfireDashboard();
