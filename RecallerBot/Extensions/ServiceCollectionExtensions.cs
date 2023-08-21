@@ -23,10 +23,11 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
+            .AddAuthorization()
             .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"))
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "User.Read" })
-            .AddMicrosoftGraph()
+            .AddMicrosoftGraph("https://graph.microsoft.com/v1.0", "User.Read")
             .AddInMemoryTokenCaches();
         //.AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
         //{
