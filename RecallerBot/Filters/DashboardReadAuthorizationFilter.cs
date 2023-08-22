@@ -19,21 +19,16 @@ public sealed class DashboardReadAuthorizationFilter : IDashboardAuthorizationFi
     {
         HttpContext httpContext = context.GetHttpContext();
 
-        string headers = string.Empty;
-
-        httpContext.Request.Headers.ToList().ForEach(header => headers += $"\n(key: {header.Key}, value: {header.Value})\n");
-
-        _logger.LogInformation($"All headers:{headers}");
-
-        _logger.LogInformation($"Azure AD access token {_hangfireAccess.ClaimType}: " + httpContext.Request.Headers[_hangfireAccess.ClaimType]);
-
         string claims = string.Empty;
 
         httpContext.User.Claims.ToList().ForEach(claim => claims += $"\n({claim.Type}, {claim.Value})\n");
 
         _logger.LogInformation("All claims: " + claims);
 
-        return httpContext.User.Identity?.IsAuthenticated ?? false
+        _logger.LogInformation("IsAuthenticated: " + httpContext.User.Identity?.IsAuthenticated);
+        _logger.LogInformation($"{_hangfireAccess.ClaimType}: {httpContext.User.Claims.FirstOrDefault(x => x.Type == _hangfireAccess.ClaimType)?.Value}");
+
+        return httpContext.User.Identity?.IsAuthenticated == true
             && httpContext.User.Claims.Any(claim =>
                 {
                     return claim.Type == _hangfireAccess.ClaimType

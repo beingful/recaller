@@ -25,9 +25,9 @@ internal static class WebApplicationExtensions
         webApp
             .UseHangfireServer()
             .UseHangfireDashboard(options: new DashboardOptions()
-        {
-            Authorization = new[] {new DashboardReadAuthorizationFilter(dashboardAccess, logger) }
-        });
+            {
+                Authorization = new[] { new DashboardReadAuthorizationFilter(dashboardAccess, logger) }
+            });
     }
 
     public static void AddPost(this WebApplication webApp, Bot configuration) =>

@@ -1,20 +1,13 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RecallerBot.Activator;
 using RecallerBot.Constants;
 using RecallerBot.Interfaces;
 using RecallerBot.Models.Configuration;
 using RecallerBot.Services;
-using System.Security.Claims;
 using Telegram.Bot;
-using Microsoft.Identity.Web;
 
 namespace RecallerBot.Extensions;
 
@@ -25,9 +18,9 @@ internal static class ServiceCollectionExtensions
         services
             .AddAuthorization()
             .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(configuration.GetSection("AzureAd"))
-            .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "User.Read" })
-            .AddMicrosoftGraph("https://graph.microsoft.com/v1.0", "User.Read")
+            .AddMicrosoftIdentityWebApp(configuration)
+            .EnableTokenAcquisitionToCallDownstreamApi()
+            .AddMicrosoftGraph()
             .AddInMemoryTokenCaches();
         
         return services;
