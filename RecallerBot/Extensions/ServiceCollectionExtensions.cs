@@ -29,71 +29,7 @@ internal static class ServiceCollectionExtensions
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { "User.Read" })
             .AddMicrosoftGraph("https://graph.microsoft.com/v1.0", "User.Read")
             .AddInMemoryTokenCaches();
-        //.AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
-        //{
-        //    Authentication authentication = configuration
-        //                                .GetSection(nameof(Authentication))
-        //                                .Get<Authentication>()!;
-
-        //    options.Authority = authentication.Authority;
-        //    options.ClientId = configuration["AzureAd:ClientId"];
-        //    options.ClientSecret = configuration["AzureAd:ClientSecret"];
-        //    options.RequireHttpsMetadata = false;
-        //    options.GetClaimsFromUserInfoEndpoint = true;
-        //    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-        //    options.SaveTokens = true;
-        //    options.Scope.Add("email");
-        //    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
-        //});
-
-
-
-
-        //.EnableTokenAcquisitionToCallDownstreamApi()
-        //.AddMicrosoftGraph()
-        //.AddInMemoryTokenCaches();
-        //services
-        //    .AddAuthentication()
-        //    .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
-        //    {
-        //        Authentication authentication = configuration
-        //                                    .GetSection(nameof(Authentication))
-        //                                    .Get<Authentication>()!;
-
-        //        options.Authority = authentication.Authority;
-        //        options.ClientId = configuration["AzureAd:ClientId"];
-        //        options.ClientSecret = configuration["AzureAd:ClientSecret"];
-        //        options.RequireHttpsMetadata = false;
-        //        options.GetClaimsFromUserInfoEndpoint = true;
-        //        options.ResponseType = OpenIdConnectResponseType.Code;
-        //        options.SaveTokens = true;
-        //        //options.Scope.Add("email");
-        //        //options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
-        //    });
-
-        //services
-        //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //    .AddMicrosoftIdentityWebApp(options =>
-        //    {
-        //        configuration.Bind("AzureAd", options);
-
-        //        options.TokenValidationParameters.NameClaimType = "name";
-        //    },
-        //    options => configuration.Bind("AzureAd", options));
-
-        //configuration.GetSection("AzureAd");
-        //services
-        //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //    .AddJwtBearer(options =>
-        //    {
-        //        Authentication authentication = configuration
-        //                                    .GetSection(nameof(Authentication))
-        //                                    .Get<Authentication>()!;
-
-        //        options.Authority = authentication.Authority;
-        //        options.Audience = authentication.Audience;
-        //    });
-
+        
         return services;
     }
 
