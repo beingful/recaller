@@ -17,7 +17,6 @@ internal static class WebApplicationExtensions
                                     .Get<HangfireDashboardAccess>()!;
 
         webApp
-            .UseHangfireServer()
             .UseHangfireDashboard(options: new DashboardOptions()
             {
                 Authorization = new[] { new DashboardReadAuthorizationFilter(dashboardAccess) }
