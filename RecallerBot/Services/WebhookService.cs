@@ -7,15 +7,21 @@ namespace RecallerBot.Services;
 internal sealed class WebhookService : IHostedService
 {
     private readonly Bot _bot;
+    private readonly TimeSheetService _timeSheetService;
+    private readonly AlarmClockService _alarmClockService;
     private readonly IBotEndpointService _botEndpointService;
     private readonly ILogger<WebhookService> _logger;
 
     public WebhookService(
         Bot bot,
+        TimeSheetService timeSheetService,
+        AlarmClockService alarmClockService,
         IBotEndpointService botEndpointService,
         ILogger<WebhookService> logger)
     {
         _bot = bot;
+        _timeSheetService = timeSheetService;
+        _alarmClockService = alarmClockService;
         _botEndpointService = botEndpointService;
         _logger = logger;
     }
@@ -27,6 +33,9 @@ internal sealed class WebhookService : IHostedService
         try
         {
             await _botEndpointService.SetWebhookAsync(_bot.WebhookUrl, cancellationToken);
+
+            _alarmClockService.SetUp();
+            _timeSheetService.StartNotifying(_bot.TestChat);
         }
         catch (Exception exception)
         {

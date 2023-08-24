@@ -85,12 +85,12 @@ internal sealed class HandleUpdateService
 
             await SendMessageAsync(message.Chat.Id, HttpStatusCode.OK);
         }
-        else if (command == Enums.BotCommand.Wakey)
-        {
-            _alarmClockService.SetUp();
+        //else if (command == Enums.BotCommand.Wakey)
+        //{
+        //    _alarmClockService.SetUp();
 
-            await SendMessageAsync(message.Chat.Id, HttpStatusCode.OK);
-        }
+        //    await SendMessageAsync(message.Chat.Id, HttpStatusCode.OK);
+        //}
         else if (command == Enums.BotCommand.Awake)
         {
             await SendMessageAsync(message.Chat.Id, HttpStatusCode.Processing);

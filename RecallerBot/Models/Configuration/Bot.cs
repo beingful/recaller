@@ -10,9 +10,11 @@ internal sealed class Bot
 
     public string HostAddress { get; init; }
 
+    public long CreatorUserId { get; init; }
+
     public Dictionary<string, long> AllowedChats { get; init; }
 
-    public long CreatorUserId { get; init; }
+    public long TestChat => AllowedChats[nameof(TestChat)];
 
     public string EscapedBotToken => Token?.Replace(':', '_');
 
