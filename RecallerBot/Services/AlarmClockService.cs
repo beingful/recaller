@@ -21,6 +21,6 @@ internal sealed class AlarmClockService
             triggerTime: new Time
             {
                 TimePeriod = TimePeriod.MimuteInterval,
-                MinuteInterval = 10
+                MinuteInterval = 1
             }));
 }

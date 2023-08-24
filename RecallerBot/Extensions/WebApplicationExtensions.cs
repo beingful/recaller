@@ -36,5 +36,6 @@ internal static class WebApplicationExtensions
                         return Results.Ok();
                     })
             .WithName(WebhookConstants.Name)
-            .ExcludeFromDescription();
+            .ExcludeFromDescription()
+            .AllowAnonymous();
 }
