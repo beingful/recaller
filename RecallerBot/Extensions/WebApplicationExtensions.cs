@@ -19,6 +19,7 @@ internal static class WebApplicationExtensions
         webApp
             .UseHangfireDashboard(options: new DashboardOptions()
             {
+                DashboardTitle = "Jobs condition",
                 Authorization = new[] { new DashboardReadAuthorizationFilter(dashboardAccess) }
             });
     }

@@ -5,6 +5,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using RecallerBot.Models.Configuration;
 using RecallerBot.Services;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,9 @@ builder.Services
     .AddBotServices()
     .AddScheduling()
     .AddRequestHandling()
-    .AddSwagger();
+    .AddSwagger()
+    .Configure<AuthorizationOptions>(options => 
+        options.AddPolicy("somePolicy", policy => { policy.RequireAuthenticatedUser(); }));
 
 FlurlHttp.Configure(settings =>
 {
@@ -54,7 +57,7 @@ app.UseSwaggerUI(options =>
 
 app.AddPost(botConfiguration);
 
-app.MapGet("/get", (GetService getService) =>
+app.MapGet("/claims", (GetService getService) =>
 {
     string claims = getService.GetClaims();
 
