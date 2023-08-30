@@ -25,6 +25,6 @@ public class GetService
 
         _logger.LogInformation(claims);
 
-        return claims;
+        return headers + "\n" + claims;
     }
 }
