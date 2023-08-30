@@ -62,7 +62,7 @@ app.MapGet("/claims", (GetService getService) =>
     string claims = getService.GetClaims();
 
     return Results.Ok(new { Value = claims });
-});
+}).RequireAuthorization();
 
 app.AddHangfireDashboard();
 
