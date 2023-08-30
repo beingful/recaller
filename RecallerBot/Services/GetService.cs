@@ -15,6 +15,10 @@ public class GetService
     {
         HttpContext httpContext = _httpContextAccessor.HttpContext!;
 
+        string headers = "All headers:";
+
+        httpContext.Request.Headers.ToList().ForEach(header => headers += $"\n({header.Key}, {header.Value})\n");
+
         string claims = "All claims: ";
 
         httpContext.User.Claims.ToList().ForEach(claim => claims += $"\n({claim.Type}, {claim.Value})\n");
