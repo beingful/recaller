@@ -18,7 +18,7 @@ internal static class ServiceCollectionExtensions
     {
         services
             .AddAuthorization()
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApp(configuration)
             .EnableTokenAcquisitionToCallDownstreamApi()
             .AddMicrosoftGraph()
