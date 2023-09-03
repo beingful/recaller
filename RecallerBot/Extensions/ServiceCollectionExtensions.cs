@@ -22,7 +22,7 @@ internal static class ServiceCollectionExtensions
             .AddMicrosoftGraph()
             .AddInMemoryTokenCaches();
 
-        return services;
+        return services.AddAuthorization();
     }
 
     public static IServiceCollection SetConfiguration(this IServiceCollection services) =>
