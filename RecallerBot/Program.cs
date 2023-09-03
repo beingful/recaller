@@ -25,9 +25,7 @@ builder.Services
     .AddBotServices()
     .AddScheduling()
     .AddRequestHandling()
-    .AddSwagger()
-    .Configure<AuthorizationOptions>(options => 
-        options.AddPolicy("somePolicy", policy => { policy.RequireAuthenticatedUser(); }));
+    .AddSwagger();
 
 FlurlHttp.Configure(settings =>
 {
