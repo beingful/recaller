@@ -1,6 +1,5 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using RecallerBot.Activator;
@@ -23,7 +22,7 @@ internal static class ServiceCollectionExtensions
             .AddMicrosoftGraph()
             .AddInMemoryTokenCaches();
 
-        return services.AddAuthorization();
+        return services;
     }
 
     public static IServiceCollection SetConfiguration(this IServiceCollection services) =>
