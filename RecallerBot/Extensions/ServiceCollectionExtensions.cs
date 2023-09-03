@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using RecallerBot.Activator;
@@ -16,14 +17,13 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
-            .AddAuthorization()
             .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(configuration)
-            .EnableTokenAcquisitionToCallDownstreamApi()
-            .AddMicrosoftGraph()
-            .AddInMemoryTokenCaches();
+            .AddMicrosoftIdentityWebApp(configuration);
+            //.EnableTokenAcquisitionToCallDownstreamApi()
+            //.AddMicrosoftGraph()
+            //.AddInMemoryTokenCaches();
 
-        return services;
+        return services.AddAuthorization();
     }
 
     public static IServiceCollection SetConfiguration(this IServiceCollection services) =>
