@@ -15,16 +15,16 @@ public class GetService
     {
         HttpContext httpContext = _httpContextAccessor.HttpContext!;
 
-        string headers = "All headers:";
+        string headers = "All headers:<br />";
 
-        httpContext.Request.Headers.ToList().ForEach(header => headers += $"\n({header.Key}, {header.Value})\n");
+        httpContext.Request.Headers.ToList().ForEach(header => headers += $"({header.Key}, {header.Value})<br />");
 
-        string claims = "All claims: ";
+        string claims = "All claims:<br />";
 
-        httpContext.User.Claims.ToList().ForEach(claim => claims += $"\n({claim.Type}, {claim.Value})\n");
+        httpContext.User.Claims.ToList().ForEach(claim => claims += $"({claim.Type}, {claim.Value})<br />");
 
         _logger.LogInformation(claims);
 
-        return headers + "\n" + claims;
+        return headers + claims;
     }
 }
