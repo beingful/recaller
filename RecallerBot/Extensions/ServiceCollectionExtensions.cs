@@ -17,12 +17,12 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
-            .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme);
-            //.AddMicrosoftIdentityWebApp(configuration)
-            //.EnableTokenAcquisitionToCallDownstreamApi()
-            //.AddMicrosoftGraph()
-            //.AddInMemoryTokenCaches();
-        
+            .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(configuration)
+            .EnableTokenAcquisitionToCallDownstreamApi()
+            .AddMicrosoftGraph()
+            .AddInMemoryTokenCaches();
+
         return services.AddAuthorization();
     }
 
