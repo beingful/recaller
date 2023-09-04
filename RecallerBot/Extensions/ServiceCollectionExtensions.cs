@@ -17,8 +17,13 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
-            .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(configuration);
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => configuration.Bind("AzureAd", options));
+            //.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            //.AddMicrosoftIdentityWebApp(options =>
+            //{
+            //    options.Scope
+            //});
             //.EnableTokenAcquisitionToCallDownstreamApi()
             //.AddMicrosoftGraph()
             //.AddInMemoryTokenCaches();
