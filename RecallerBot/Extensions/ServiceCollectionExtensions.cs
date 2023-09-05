@@ -1,6 +1,5 @@
 ﻿using Hangfire;
 using Hangfire.Storage;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using RecallerBot.Activator;
@@ -17,10 +16,8 @@ internal static class ServiceCollectionExtensions
     public static IServiceCollection AddAzureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
     {
         services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => configuration.Bind("AzureAd", options));
-            //.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            //.AddMicrosoftIdentityWebApp(options =>
+            .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(configuration);
             //{
             //    options.Scope
             //});
