@@ -2,6 +2,7 @@
 using Hangfire.Storage;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RecallerBot.Activator;
 using RecallerBot.Constants;
 using RecallerBot.Interfaces;
@@ -17,7 +18,24 @@ internal static class ServiceCollectionExtensions
     {
         services
             .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(configuration);
+            .AddMicrosoftIdentityWebApp(options =>
+            {
+                AzureAd azureAd = configuration
+                    .GetSection(nameof(AzureAd))
+                    .Get<AzureAd>()!;
+
+                options.Instance = azureAd.Instance;
+                options.Domain = azureAd.Domain;
+                options.TenantId = azureAd.TenantId;
+                options.Authority = azureAd.Authority;
+                options.ClientId = azureAd.ClientId;
+                options.ClientSecret = azureAd.ClientSecret;
+                options.CallbackPath = azureAd.CallbackPath;
+
+                options.ResponseType = OpenIdConnectResponseType.Code;
+
+                options.Scope.Add(azureAd.Scope);
+            });
             //{
             //    options.Scope
             //});
