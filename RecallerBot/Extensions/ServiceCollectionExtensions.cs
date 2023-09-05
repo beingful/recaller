@@ -32,7 +32,7 @@ internal static class ServiceCollectionExtensions
                 options.ClientSecret = azureAd.ClientSecret;
                 options.CallbackPath = azureAd.CallbackPath;
 
-                options.ResponseType = OpenIdConnectResponseType.Code;
+                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
