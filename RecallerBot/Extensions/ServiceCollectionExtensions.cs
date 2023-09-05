@@ -34,6 +34,8 @@ internal static class ServiceCollectionExtensions
 
                 options.ResponseType = OpenIdConnectResponseType.Code;
 
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
                 options.Scope.Add(azureAd.Scope);
             });
             //{
