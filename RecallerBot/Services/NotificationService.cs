@@ -27,6 +27,8 @@ internal class NotificationService : IConditionedNotificationService
         DateTime today = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneProvider.GetTimeZone());
         DateTime lastWeekdayOfMonth = today.GetLastWeekdayOfMonth();
 
+        _logger.LogInformation(LogMessages.NotLastWeekdayOfMonthOrFriday, today, today.DayOfWeek, lastWeekdayOfMonth);
+
         if (today.Day == lastWeekdayOfMonth.Day && today.IsNotFriday())
         {
             await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
