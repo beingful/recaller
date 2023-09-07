@@ -28,7 +28,7 @@ internal static class DateTimeExtensions
 
     private static bool IsNotWeekend(this DateTime date) =>
         date.DayOfWeek != DayOfWeek.Saturday
-        || date.DayOfWeek != DayOfWeek.Sunday;
+        && date.DayOfWeek != DayOfWeek.Sunday;
 
     private static bool IsSunday(this DateTime date) =>
         date.DayOfWeek == DayOfWeek.Sunday;
