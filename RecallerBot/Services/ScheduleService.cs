@@ -23,9 +23,9 @@ internal sealed class ScheduleService
 
     public Dictionary<TimePeriod, Func<Time, string>> CronExpressions => new()
     {
-        { TimePeriod.Friday, (Time time) => Cron.Weekly(DayOfWeek.Friday, time.Hour, time.Minute) },
-        { TimePeriod.LastDayOfMonth, (Time time) => $"{time.Minute} {time.Hour} L * *" },
-        { TimePeriod.MimuteInterval, (Time time) => $"*/{time.MinuteInterval} * * * *" }
+        { TimePeriod.OnFridays, (Time time) => Cron.Minutely() },//Cron.Weekly(DayOfWeek.Friday, time.Hour, time.Minute) },
+        { TimePeriod.Daily, (Time time) => Cron.Minutely() },
+        { TimePeriod.MinuteInterval, (Time time) => $"*/{time.MinuteInterval} * * * *" }
     };
 
     public void ScheduleAll<T>(List<Job> jobs) where T : INotificationService

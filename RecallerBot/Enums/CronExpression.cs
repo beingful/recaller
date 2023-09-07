@@ -2,7 +2,7 @@
 
 internal enum TimePeriod
 {
-    Friday,
-    LastDayOfMonth,
-    MimuteInterval
+    OnFridays,
+    Daily,
+    MinuteInterval
 }

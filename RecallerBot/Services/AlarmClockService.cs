@@ -20,7 +20,7 @@ internal sealed class AlarmClockService
             chatId: _chatMessageService.TestChat,
             triggerTime: new Time
             {
-                TimePeriod = TimePeriod.MimuteInterval,
-                MinuteInterval = 1
+                TimePeriod = TimePeriod.MinuteInterval,
+                MinuteInterval = 15
             }));
 }

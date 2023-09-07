@@ -21,7 +21,7 @@ internal class TimeSheetService
                 chatId: chatId,
                 triggerTime: new Time
                 {
-                    TimePeriod = TimePeriod.Friday,
+                    TimePeriod = TimePeriod.OnFridays,
                     Hour = 10,
                     Minute = 0
                 }),
@@ -29,7 +29,7 @@ internal class TimeSheetService
                 chatId: chatId,
                 triggerTime: new Time
                 {
-                    TimePeriod = TimePeriod.Friday,
+                    TimePeriod = TimePeriod.OnFridays,
                     Hour = 12,
                     Minute = 0
                 })
@@ -41,7 +41,7 @@ internal class TimeSheetService
                 chatId: chatId,
                 triggerTime: new Time
                 {
-                    TimePeriod = TimePeriod.LastDayOfMonth,
+                    TimePeriod = TimePeriod.Daily,
                     Hour = 10,
                     Minute = 0
                 }),
@@ -49,7 +49,7 @@ internal class TimeSheetService
                 chatId: chatId,
                 triggerTime: new Time
                 {
-                    TimePeriod = TimePeriod.LastDayOfMonth,
+                    TimePeriod = TimePeriod.Daily,
                     Hour = 12,
                     Minute = 0
                 })
