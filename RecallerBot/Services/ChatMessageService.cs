@@ -15,7 +15,6 @@ internal sealed class ChatMessageService
         {
             { $"/start{bot.Username}", Enums.BotCommand.Start },
             { $"/stop{bot.Username}", Enums.BotCommand.Stop },
-            { $"/wakey{bot.Username}", Enums.BotCommand.Wakey },
             { $"/awake{bot.Username}",  Enums.BotCommand.Awake }
         };
     }
