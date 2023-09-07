@@ -13,14 +13,14 @@ internal static class DateTimeExtensions
         return lastSundayOfMonth.GetLastDayOfMonthByCondition(IsSunday);
     }
 
-    public static bool IsLastWeekdayOfMonth(this DateTime date)
+    public static DateTime GetLastWeekdayOfMonth(this DateTime date)
     {
         DateTime lastDayOfMonth = new(date.Year, date.Month,
             DateTime.DaysInMonth(date.Year, date.Month));
 
         DateTime lastWeekdayOfMonth = lastDayOfMonth.GetLastDayOfMonthByCondition(IsNotWeekend);
 
-        return date.Day == lastWeekdayOfMonth.Day;
+        return lastWeekdayOfMonth;
     }
 
     public static bool IsNotFriday(this DateTime date) =>

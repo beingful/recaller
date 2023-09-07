@@ -1,4 +1,5 @@
-﻿using RecallerBot.Extensions;
+﻿using RecallerBot.Constants;
+using RecallerBot.Extensions;
 using RecallerBot.Interfaces;
 using RecallerBot.Models;
 using RecallerBot.Providers;
@@ -8,10 +9,14 @@ namespace RecallerBot.Services;
 internal class NotificationService : IConditionedNotificationService
 {
     private readonly IBotMessageService _botMessageService;
+    private readonly ILogger _logger;
 
-    public NotificationService(IBotMessageService botMessageService)
+    public NotificationService(
+        IBotMessageService botMessageService,
+        ILogger<NotificationService> logger)
     {
         _botMessageService = botMessageService;
+        _logger = logger;
     }
 
     public async Task SendAsync(Notification notification) =>
@@ -20,11 +25,15 @@ internal class NotificationService : IConditionedNotificationService
     public async Task SendExceptFridaysAsync(Notification notification)
     {
         DateTime today = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneProvider.GetTimeZone());
-        await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
+        DateTime lastWeekdayOfMonth = today.GetLastWeekdayOfMonth();
 
-        //if (today.IsLastWeekdayOfMonth() && today.IsNotFriday())
-        //{
-        //    await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
-        //}
+        if (today.Day == lastWeekdayOfMonth.Day && today.IsNotFriday())
+        {
+            await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
+        }
+        else
+        {
+            _logger.LogInformation(LogMessages.NotLastWeekdayOfMonthOrFriday, today, today.DayOfWeek, lastWeekdayOfMonth);
+        }
     }
 }

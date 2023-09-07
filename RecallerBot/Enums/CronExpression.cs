@@ -2,7 +2,7 @@
 
 internal enum TimePeriod
 {
-    OnFridays,
+    Friday,
     Daily,
     MinuteInterval
 }
