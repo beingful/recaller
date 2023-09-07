@@ -35,7 +35,7 @@ internal sealed class WebhookService : IHostedService
             await _botEndpointService.SetWebhookAsync(_bot.WebhookUrl, cancellationToken);
 
             _alarmClockService.SetUp();
-            _timeSheetService.StartNotifying(_bot.TestChat);
+            _timeSheetService.StartNotifying(_bot.ProdChat);
         }
         catch (Exception exception)
         {

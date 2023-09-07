@@ -14,7 +14,7 @@ internal sealed class Bot
 
     public Dictionary<string, long> AllowedChats { get; init; }
 
-    public long TestChat => AllowedChats[nameof(TestChat)];
+    public long ProdChat => AllowedChats[nameof(ProdChat)];
 
     public string EscapedBotToken => Token?.Replace(':', '_');
 
