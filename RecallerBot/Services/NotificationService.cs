@@ -25,15 +25,14 @@ internal class NotificationService : IConditionedNotificationService
     public async Task SendExceptFridaysAsync(Notification notification)
     {
         DateTime today = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneProvider.GetTimeZone());
-        DateTime lastWeekdayOfMonth = today.GetLastWeekdayOfMonth();
 
-        if (today.Day == lastWeekdayOfMonth.Day && today.IsNotFriday())
+        if (today.IsLastWeekdayOfMonth() && today.IsNotFriday())
         {
             await _botMessageService.SendTextMessageAsync(notification.ChatId, notification.Text);
         }
         else
         {
-            _logger.LogInformation(LogMessages.NotLastWeekdayOfMonthOrFriday, today, today.DayOfWeek, lastWeekdayOfMonth);
+            _logger.LogInformation(LogMessages.TodayIsFridayNotLastWeekdayOfMonth, today);
         }
     }
 }

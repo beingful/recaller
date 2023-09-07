@@ -22,7 +22,7 @@ internal static class LogMessages
 
     public const string JobsWithEndpointUnscheduled = "Jobs with endpoint {endpoint} are unscheduled. Current number of jobs: {jobsNumber}";
 
-    public const string NotLastWeekdayOfMonthOrFriday = "{today} is {weekday}. Last weekday of month: {lastWeekdayOfMonth}";
+    public const string TodayIsFridayNotLastWeekdayOfMonth = "{today} is Friday or not last weekday of month";
 
     public const string BotDoesNotSleep = "Bot does not sleep";
 }
